@@ -14,7 +14,7 @@
 
 #@SuppressWarnings("WeakerAccess")
 from LoessInterpolator import LoessInterpolator
-
+#
 class LoessSmoother(object):
     """ generated source for class LoessSmoother """
     def __init__(self, width, jump, degree, data, externalWeights):
