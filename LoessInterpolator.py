@@ -1,5 +1,4 @@
 import math 
-
 class LoessInterpolator(object):
     
     def __init__(self):
