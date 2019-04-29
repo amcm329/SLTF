@@ -389,7 +389,7 @@ class SeasonalTrendLoess:
                                                                .setPeriodicity(periodicity)\
                                                                .build()
         self.fDetrend = np.zeros(size)
-        self.fExtendedSeasonal = np.zeroes(size + 2 * fPeriodLength)
+        self.fExtendedSeasonal = np.zeros(size + 2 * self.fPeriodLength)
 
 	#
 	# Factory method to perform a non-robust STL decomposition enforcing strict periodicity.
