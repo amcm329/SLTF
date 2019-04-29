@@ -96,7 +96,7 @@ class LoessSmoother(object):
 
     def smooth(self):
         """ generated source for method smooth """
-        if len(fData):
+        if len(fData) == 1:
             self.fSmoothed[0] = self.fData[0]
             return self.fSmoothed
         left = -1
