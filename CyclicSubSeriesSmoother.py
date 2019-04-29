@@ -1,4 +1,3 @@
-
 import math
 import numpy as np
 from LoessSmoother import LoessSmoother
@@ -17,9 +16,9 @@ class CyclicSubSeriesSmoother:
      @param numPeriodsToExtrapolateForward  numbers of periods to extrapolate forward
 	""" 
     def __init__(self, width, degree, jump, dataLength, periodicity, numPeriodsToExtrapolateBackward, numPeriodsToExtrapolateForward):
-        self._fRawCyclicSubSeries = []
-        self._fSmoothedCyclicSubSeries = []
-        self._fSubSeriesWeights = []
+        self._fRawCyclicSubSeries = np.empty(1)
+        self._fSmoothedCyclicSubSeries = np.empty(1)
+        self._fSubSeriesWeights = np.empty(1)
 
         self._fPeriodLength = 0
         self._fNumPeriods = 0
@@ -28,7 +27,7 @@ class CyclicSubSeriesSmoother:
         self._fNumPeriodsToExtrapolateForward = 0
 
         self._fWidth = 0
-        self._fLoessSmootherFactory = None;
+        self._fLoessSmootherFactory = None
 		
         self._fWidth = width
 
@@ -41,13 +40,13 @@ class CyclicSubSeriesSmoother:
         self._fNumPeriodsToExtrapolateForward = numPeriodsToExtrapolateForward
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fRawCyclicSubSeries = [[]]*periodicity
+        self._fRawCyclicSubSeries = np.empty([int(periodicity),1])
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fSmoothedCyclicSubSeries = [[]]*periodicity
+        self._fSmoothedCyclicSubSeries = np.empty([int(periodicity),1])
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fSubSeriesWeights = [[]]*periodicity
+        self._fSubSeriesWeights = np.empty([int(periodicity),1])
 
         """
          Bookkeeping: Write the data length as
@@ -106,29 +105,29 @@ class CyclicSubSeriesSmoother:
         #++period
         while period < self._fPeriodLength:
               period += 1
-              cycleLength =  (self._fNumPeriods + 1) if period < fRemainder else fNumPeriods
+              cycleLength =  (self._fNumPeriods + 1) if period < self._fRemainder else self._fNumPeriods
               i = 0
 
               #period ++
               while i < cycleLength:
                     i += 1 
-                    self._fRawCyclicSubSeries[period][i] = data[i * fPeriodLength + period]
+                    self._fRawCyclicSubSeries[period][i] = data[i * self._fPeriodLength + period]
                     if weights != None: 
-                       self._fSubSeriesWeights[period][i] = weights[i * fPeriodLength + period]
+                       self._fSubSeriesWeights[period][i] = weights[i * self._fPeriodLength + period]
 
 
     def reconstructExtendedDataFromSubSeries(self, data):
         period = 0 
         #Copy this smoothed cyclic sub-series to the extendedSeasonal work array.
-        while period < fPeriodLength:
+        while period < self._fPeriodLength:
               #++period
               period += 1
-              cycleLength = (fNumPeriods + 1) if period < fRemainder else fNumPeriods
+              cycleLength = (self._fNumPeriods + 1) if period < self._fRemainder else self._fNumPeriods
               i = 0
-              while i < fNumPeriodsToExtrapolateBackward + cycleLength + fNumPeriodsToExtrapolateForward:
+              while i < self._fNumPeriodsToExtrapolateBackward + cycleLength + self._fNumPeriodsToExtrapolateForward:
                     #++i
                     i += 1 
-                    data[i * fPeriodLength + period] = fSmoothedCyclicSubSeries[period][i]
+                    data[i * self._fPeriodLength + period] = self._fSmoothedCyclicSubSeries[period][i]
 			
 
     """
@@ -168,7 +167,7 @@ class CyclicSubSeriesSmoother:
         leftValue = self._fNumPeriodsToExtrapolateBackward
 
         #es menor e igual
-        for i in range(1,fNumPeriodsToExtrapolateBackward + 1):
+        for i in range(1, self._fNumPeriodsToExtrapolateBackward + 1):
             ys = interpolator.smoothOnePoint(-i, left, right)
             smoothedData[leftValue - i] = smoothedData[leftValue] if ys == None else ys
 
@@ -179,7 +178,7 @@ class CyclicSubSeriesSmoother:
             rightValue = sel._fNumPeriodsToExtrapolateBackward + right
 
             #es menor e igual
-            for i in range(1,fNumPeriodsToExtrapolateForward + 1):
+            for i in range(1,self._fNumPeriodsToExtrapolateForward + 1):
                 ys = interpolator.smoothOnePoint(right + i, left, right)
                 smoothedData[rightValue + i] = smoothedData[rightValue] if ys == None else ys
 				
@@ -241,7 +240,7 @@ class CyclicSubSeriesSmoother:
 
          @param dataLength total length of the data
          @return this
-	    """	
+        """	
         def setDataLength(self, dataLength):
             self._fDataLength = dataLength
             return self
