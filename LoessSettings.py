@@ -67,4 +67,4 @@ class LoessSettings:
 
     def __str__(self):
         """ generated source for method toString """
-        return String.format("[width = %d, degree = %d, jump = %d]", self.fWidth, self.fDegree, self.fJump)
+        return "[width = {}, degree = {}, jump = {}]".format(self.fWidth, self.fDegree, self.fJump)
