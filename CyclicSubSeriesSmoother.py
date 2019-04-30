@@ -40,6 +40,7 @@ class CyclicSubSeriesSmoother:
         self._fNumPeriodsToExtrapolateForward = numPeriodsToExtrapolateForward
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
+<<<<<<< HEAD
         self._fRawCyclicSubSeries = np.array(int(periodicity))
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
@@ -47,6 +48,15 @@ class CyclicSubSeriesSmoother:
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
         self._fSubSeriesWeights = np.array(int(periodicity))
+=======
+        self._fRawCyclicSubSeries = [[]]*periodicity
+
+        #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
+        self._fSmoothedCyclicSubSeries = [[]]*periodicity
+
+        #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
+        self._fSubSeriesWeights = [[]]*periodicity
+>>>>>>> c0a0b23c28ebc102983e8c9bdda358fabcc0322d
 
         """
          Bookkeeping: Write the data length as
