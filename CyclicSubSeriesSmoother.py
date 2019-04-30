@@ -16,9 +16,9 @@ class CyclicSubSeriesSmoother:
      @param numPeriodsToExtrapolateForward  numbers of periods to extrapolate forward
 	""" 
     def __init__(self, width, degree, jump, dataLength, periodicity, numPeriodsToExtrapolateBackward, numPeriodsToExtrapolateForward):
-        self._fRawCyclicSubSeries = np.empty(1)
-        self._fSmoothedCyclicSubSeries = np.empty(1)
-        self._fSubSeriesWeights = np.empty(1)
+        self._fRawCyclicSubSeries = np.array(1)
+        self._fSmoothedCyclicSubSeries = np.array(1)
+        self._fSubSeriesWeights = np.array(1)
 
         self._fPeriodLength = 0
         self._fNumPeriods = 0
@@ -40,13 +40,13 @@ class CyclicSubSeriesSmoother:
         self._fNumPeriodsToExtrapolateForward = numPeriodsToExtrapolateForward
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fRawCyclicSubSeries = np.empty([1, int(periodicity)])
+        self._fRawCyclicSubSeries = np.array(int(periodicity))
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fSmoothedCyclicSubSeries = np.empty([1, int(periodicity)])
+        self._fSmoothedCyclicSubSeries = np.array(int(periodicity)])
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fSubSeriesWeights = np.empty([1, int(periodicity)])
+        self._fSubSeriesWeights = np.array(int(periodicity))
 
         """
          Bookkeeping: Write the data length as
@@ -61,17 +61,15 @@ class CyclicSubSeriesSmoother:
          where p is the index of the cycle that we're currently in.
         """
             
-        period = 0
-        while period < periodicity:
-              #importante con el ++period
-              period += 1 
+        for period in range(periodicity):
+            #importante con el ++period
 
-              seriesLength = self._fNumPeriods + 1 if period < self._fRemainder else self._fNumPeriods
+            seriesLength = self._fNumPeriods + 1 if period < self._fRemainder else self._fNumPeriods
 
-              #Lo mismo, hacer esa verificacion aqui para poder hacer la "matriz" que se pide en Java 
-              self._fRawCyclicSubSeries[period] = np.zeros(int(seriesLength))
-              self._fSmoothedCyclicSubSeries[period] = np.empty(int(self._fNumPeriodsToExtrapolateBackward + seriesLength +     self._fNumPeriodsToExtrapolateForward))
-              self._fSubSeriesWeights[period] = np.empty(int(seriesLength))
+            #Lo mismo, hacer esa verificacion aqui para poder hacer la "matriz" que se pide en Java 
+            self._fRawCyclicSubSeries[period] = np.zeros(int(seriesLength))
+            self._fSmoothedCyclicSubSeries[period] = np.empty(int(self._fNumPeriodsToExtrapolateBackward + seriesLength +     self._fNumPeriodsToExtrapolateForward))
+            self._fSubSeriesWeights[period] = np.empty(int(seriesLength))
 			  
 			  
     """
@@ -89,21 +87,19 @@ class CyclicSubSeriesSmoother:
 
 
     def computeSmoothedSubSeries(self, useResidualWeights):
-        period = 0
-           
+        
         #importante lo del ++period
-        while period < self._fPeriodLength:
-              weights = self._fSubSeriesWeights[period] if useResidualWeights else None
-              rawData = self._fRawCyclicSubSeries[period]
-              smoothedData = self._fSmoothedCyclicSubSeries[period]
-              self.smoothOneSubSeries(weights, rawData, smoothedData)
+        for period in range(self._fPeriodLength):
+            weights = self._fSubSeriesWeights[period] if useResidualWeights else None
+            rawData = self._fRawCyclicSubSeries[period]
+            smoothedData = self._fSmoothedCyclicSubSeries[period]
+            self.smoothOneSubSeries(weights, rawData, smoothedData)
 
 
     def extractRawSubSeriesAndWeights(self, data, weights):
-        period = 0
-            
+          
         #++period
-        while period < self._fPeriodLength:
+        for period in range(self._fPeriodLength:
               period += 1
               cycleLength =  (self._fNumPeriods + 1) if period < self._fRemainder else self._fNumPeriods
               i = 0
