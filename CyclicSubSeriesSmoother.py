@@ -321,7 +321,7 @@ class CyclicSubSeriesSmoother:
                                            self._fJump, 
                                            self._fDataLength, 
                                            self._fPeriodicity,
-					   fself._fNumPeriodsBackward, 
+					   self._fNumPeriodsBackward, 
                                            self._fNumPeriodsForward
                                            )
 		
