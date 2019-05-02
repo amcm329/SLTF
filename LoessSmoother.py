@@ -18,7 +18,7 @@ from LoessInterpolator import LoessInterpolator
 class LoessSmoother(object):
     """ generated source for class LoessSmoother """
     def __init__(self, width, jump, degree, data, externalWeights):
-        b = LoessInterpolator.self.Builder()
+        b = LoessInterpolator.Builder()
         self.fInterpolator = b.setWidth(width).setDegree(degree).setExternalWeights(externalWeights).interpolate(data)
         self.fData = []
         self.fJump = min(jump, len(data))
@@ -68,9 +68,9 @@ class LoessSmoother(object):
         # Build the LoessSmoother.
 	 
         def build(self):
-            if self.fWidth == None:
+            if self.fWidth is None:
                 raise ValueError("LoessSmoother.Builder: Width must be set before calling build")
-            if self.fData == None:
+            if self.fData is None:
                 raise ValueError("LoessSmoother.Builder: Data must be set before calling build")
             
             return LoessSmoother(self.fWidth, self.fJump, self.fDegree, self.fData, self.fExternalWeights)

@@ -16,9 +16,9 @@ class CyclicSubSeriesSmoother:
      @param numPeriodsToExtrapolateForward  numbers of periods to extrapolate forward
 	""" 
     def __init__(self, width, degree, jump, dataLength, periodicity, numPeriodsToExtrapolateBackward, numPeriodsToExtrapolateForward):
-        self._fRawCyclicSubSeries = np.array(1)
-        self._fSmoothedCyclicSubSeries = np.array(1)
-        self._fSubSeriesWeights = np.array(1)
+        #self._fRawCyclicSubSeries = np.array(1)
+        #self._fSmoothedCyclicSubSeries = np.array(1)
+        #self._fSubSeriesWeights = np.array(1)
 
         self._fPeriodLength = 0
         self._fNumPeriods = 0
@@ -40,23 +40,13 @@ class CyclicSubSeriesSmoother:
         self._fNumPeriodsToExtrapolateForward = numPeriodsToExtrapolateForward
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-<<<<<<< HEAD
-        self._fRawCyclicSubSeries = np.array(int(periodicity))
+        self._fRawCyclicSubSeries = [[]] * periodicity
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fSmoothedCyclicSubSeries = np.array(int(periodicity)])
+        self._fSmoothedCyclicSubSeries = [[]] * periodicity
 
         #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fSubSeriesWeights = np.array(int(periodicity))
-=======
-        self._fRawCyclicSubSeries = [[]]*periodicity
-
-        #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fSmoothedCyclicSubSeries = [[]]*periodicity
-
-        #ver si se crea un [] o de una vez un [] con elementos de tamanho periodicity
-        self._fSubSeriesWeights = [[]]*periodicity
->>>>>>> c0a0b23c28ebc102983e8c9bdda358fabcc0322d
+        self._fSubSeriesWeights = [[]] * periodicity
 
         """
          Bookkeeping: Write the data length as
@@ -109,30 +99,23 @@ class CyclicSubSeriesSmoother:
     def extractRawSubSeriesAndWeights(self, data, weights):
           
         #++period
-        for period in range(self._fPeriodLength:
-              period += 1
+        for period in range(self._fPeriodLength):
               cycleLength =  (self._fNumPeriods + 1) if period < self._fRemainder else self._fNumPeriods
-              i = 0
 
               #period ++
-              while i < cycleLength:
-                    i += 1 
+              for i in range(int(cycleLength)):
                     self._fRawCyclicSubSeries[period][i] = data[i * self._fPeriodLength + period]
                     if weights != None: 
                        self._fSubSeriesWeights[period][i] = weights[i * self._fPeriodLength + period]
 
 
     def reconstructExtendedDataFromSubSeries(self, data):
-        period = 0 
         #Copy this smoothed cyclic sub-series to the extendedSeasonal work array.
-        while period < self._fPeriodLength:
+        for period in range(self._fPeriodLength):
               #++period
-              period += 1
               cycleLength = (self._fNumPeriods + 1) if period < self._fRemainder else self._fNumPeriods
-              i = 0
-              while i < self._fNumPeriodsToExtrapolateBackward + cycleLength + self._fNumPeriodsToExtrapolateForward:
-                    #++i
-                    i += 1 
+              for i in range(self._fNumPeriodsToExtrapolateBackward + cycleLength + self._fNumPeriodsToExtrapolateForward):
+                    #++i 
                     data[i * self._fPeriodLength + period] = self._fSmoothedCyclicSubSeries[period][i]
 			
 

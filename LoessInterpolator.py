@@ -23,7 +23,7 @@ class LoessInterpolator(object):
         def setWidth(self, width):
             """ generated source for method setWidth """
             self._fWidth = width
-            return Builder
+            return self
 
        
        
@@ -46,15 +46,15 @@ class LoessInterpolator(object):
  
         def interpolate(self, data):
             """ generated source for method interpolate """
-            if self._fWidth == None:
+            if self._fWidth is None:
                 raise IllegalStateException("LoessInterpolator.Builder: Width must be set")
-            if data == None:
+            if data is None:
                 raise IllegalStateException("LoessInterpolator.Builder: data must be non-null")
-            if self._fDegree==0:
+            if self._fDegree == 0:
                 return FlatLoessInterpolator(self._fWidth, data, self._fExternalWeights)
-            elif self._fDegree==1:
+            elif self._fDegree == 1:
                 return LinearLoessInterpolator(self._fWidth, data, self._fExternalWeights)
-            elif self._fDegree==2:
+            elif self._fDegree == 2:
                 return QuadraticLoessInterpolator(self._fWidth, data, self._fExternalWeights)
             else:
                 return None
