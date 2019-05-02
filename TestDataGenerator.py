@@ -4,6 +4,7 @@
 import unittest
 import time
 import math
+import numpy as np
 
 # 
 #  * Wrapper around a moderately large data set for ease of access and less copying.
@@ -20,13 +21,13 @@ class TestDataGenerator:
 
     def __init__(self):
         """ generated source for method __init__ """
-        length = len(TEST_DATA)
+        length = len(self.TEST_DATA)
         self.times = np.r_[range(length)] * 60 * 60 * 1000
-        self.values = TEST_DATA[:,0]
-        self.trend = TEST_DATA[:,1]
-        self.seasonal = TEST_DATA[:,2]
-        self.residuals = TEST_DATA[:,3]
-        self.weights = TEST_DATA[:,4]
+        self.values = self.TEST_DATA[:,0]
+        self.trend = self.TEST_DATA[:,1]
+        self.seasonal = self.TEST_DATA[:,2]
+        self.residuals = self.TEST_DATA[:,3]
+        self.weights = self.TEST_DATA[:,4]
 
 
     def getSeed(self):

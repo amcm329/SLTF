@@ -3,6 +3,7 @@
 # package: com.github.servicenow.ds.stats.stl
 import unittest
 from SeasonalTrendLoess import SeasonalTrendLoess
+from TestDataGenerator import TestDataGenerator
 import numpy as np
 
 # 
@@ -12,7 +13,7 @@ import numpy as np
 #  
 class SeasonalTrendLoessTest(unittest.TestCase):
     """ generated source for class SeasonalTrendLoessTest """
-    testDataGenerator = StlTestDataGenerator()
+    testDataGenerator = TestDataGenerator()
 
     def test_pureSineTest(self):
         """ generated source for method pureSineTest """
