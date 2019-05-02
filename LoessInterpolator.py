@@ -225,7 +225,7 @@ class LinearLoessInterpolator(LoessInterpolator):
     #    
     def __init__(self, width, data, externalWeights):
         """ generated source for method __init__ """
-        super(LinearLoessInterpolator, self ,data, externalWeights).__init__(externalWeights)
+        super(LinearLoessInterpolator, self).__init__(externalWeights,data)     
 
     # 
     #    * Compute weighted least squares fit to the data points and adjust the weights with the results.
