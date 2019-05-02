@@ -24,6 +24,8 @@ class LoessSmoother:
     fWidth = None
     fJump = None
     fSmoothed = []
+    y = None
+
 
     class Builder:
         #generated source for class Builder 
@@ -113,8 +115,8 @@ class LoessSmoother:
             left = 0
             right = len(self.fData)
             for i in range(len(self.fData)):
-                y = LoessInterpolator.smoothOnePoint(i, left, right)
-                self.fSmoothed[i] = self.fData[i] if y == None else y
+                self.y = self.fInterpolator.smoothOnePoint(i, left, right)
+                self.fSmoothed[i] = self.fData[i] if self.y == None else self.y
 
         elif self.fJump == 1:
             halfWidth = int((self.fWidth + 1) / 2)
@@ -124,8 +126,8 @@ class LoessSmoother:
                 if i >= halfWidth and right != len(self.fData):
                     left += 1
                     right += 1
-                y = LoessInterpolator.smoothOnePoint(i, left, right)
-                self.fSmoothed[i] = self.fData[i] if y == None else y
+                self.y = self.fInterpolator.smoothOnePoint(i, left, right)
+                self.fSmoothed[i] = self.fData[i] if self.y == None else self.y
                 
         else:
             halfWidth = int((self.fWidth + 1) / 2)
@@ -137,8 +139,8 @@ class LoessSmoother:
                 else:
                     left = i - halfWidth + 1
                 right = left + self.fWidth - 1
-                y = LoessInterpolator.smoothOnePoint(i, left, right)
-                self.fSmoothed[i] = self.fData[i] if y == None else y
+                self.y = self.fInterpolator.smoothOnePoint(i, left, right)
+                self.fSmoothed[i] = self.fData[i] if self.y == None else self.y
         
         if self.fJump != 1:
             for i in range(len(self.fData - self.fJump)):
@@ -148,8 +150,8 @@ class LoessSmoother:
             last = int(len(self.fData) - 1);
             lastSmoothedPos = int((last / fJump) * fJump);
             if lastSmoothedPos != last:
-                y = LoessInterpolator.smoothOnePoint(i, left, right)
-                self.fSmoothed[last] = self.fData[last] if y == None else y
+                self.y = self.fInterpolator.smoothOnePoint(i, left, right)
+                self.fSmoothed[last] = self.fData[last] if self.y == None else self.y
                 if lastSmoothedPos != last - 1:
                     slope = (fSmoothed[last] - fSmoothed[lastSmoothedPos]) / (last - lastSmoothedPos);
                     j = lastSmoothedPos + 1
