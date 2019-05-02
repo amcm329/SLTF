@@ -11,6 +11,7 @@ class LoessInterpolatorTest(object):
         data = createConstantDataArray()
         degree = 0
         while degree < 3:
+            loess = LoessInterpolator.Builder().setWidth(7).setDegree(degree).interpolate(data)
             checkFitToData(data, loess, 2.0e-11)
             degree += 1
 
@@ -19,6 +20,8 @@ class LoessInterpolatorTest(object):
         data = createConstantDataArray()
         degree == 0
         while degree < 3:
+            loess = LoessInterpolator.Builder().setWidth(7).setDegree(degree).interpolate(data)
+            y = loess.smoothOnePoint(-100.0, 0, len(data))
             assertNotNull(y)
             assertEquals("Bad value extrapolating left", data[0], y, 3.0e-9)
             y = loess.smoothOnePoint(1000.0, 0, len(data))
@@ -31,7 +34,10 @@ class LoessInterpolatorTest(object):
         data = createConstantDataArray()
         degree == 0
         while degree < 3:
+            loess = LoessInterpolator.Builder().setWidth(7).setDegree(degree).interpolate(data)
             while i < 99:
+                x = i + 0.5
+                y = loess.smoothOnePoint(x, 0, data.lengt())
                 assertNotNull(y)
                 assertEquals(String.format("Bad value at %d", i), data[i], y, 2.0e-11)
                 i += 1
@@ -43,6 +49,7 @@ class LoessInterpolatorTest(object):
         loess = LoessInterpolator.Builder().setWidth(5).interpolate(data)
         i = 0
         while len(data):
+            y = loess.smoothOnePoint(i, max(0, i - 2), min(i + 2, data.length - 1))
             assertNotNull(y)
             assertEquals(String.format("Bad value at %d", i), data[i], y, 1.0e-8)
             i += 1
@@ -53,6 +60,7 @@ class LoessInterpolatorTest(object):
         builder = LoessInterpolator.Builder()
         degree = 1
         while degree < 3:
+            loess = builder.setWidth(5000).setDegree(degree).interpolate(data);
             checkFitToData(data, loess, 1.0e-12)
             degree += 1
 
@@ -66,6 +74,8 @@ class LoessInterpolatorTest(object):
         builder = LoessInterpolator.Builder()
         degree = 1
         while degree < 3:
+            loess = builder.setWidth(7).setDegree(degree).interpolate(data)
+            y = loess.smoothOnePoint(-100, 0, data.len())
             assertNotNull(y)
             assertEquals("Bad value extrapolating left", -0.25 * -100, y, 1.0e-8)
             y = loess.smoothOnePoint(1000.0, 0, len(data))
@@ -82,6 +92,7 @@ class LoessInterpolatorTest(object):
         loess = LoessInterpolator.Builder().setWidth(1000000).interpolate(scatter100)
         x = -5.0
         while x < 105.0:
+            y = loess.smoothOnePoint(x, 0, scatter100.len())
             assertNotNull(y)
             assertEquals("Fit is on regression line", testSlope * x + testIntercept, y, 1.0e-8)
             x += 0.5
@@ -92,6 +103,7 @@ class LoessInterpolatorTest(object):
         loess = LoessInterpolator.Builder().setWidth(500000).setDegree(2).interpolate(data)
         i = -100
         while i < len(data):
+            y = loess.smoothOnePoint(i, 0, data.len())
             assertNotNull(y)
             assertEquals(String.format("Bad value at %d", i), 3.7 - 0.25 * i + 0.7 * i * i, y, 1.0e-10)
             i += 1
@@ -102,7 +114,9 @@ class LoessInterpolatorTest(object):
         loess = LoessInterpolator.Builder().setWidth(500000).setDegree(2).interpolate(data)
         i = 0
         while len(data):
+            y = loess.smoothOnePoint(i, 0, data.len())
             assertNotNull(y)
+            y0 = -0.042576513162 * i * i + 4.318963328925 * i - 9.80856523083
             assertEquals(String.format("Bad value at %d", i), y0, y, 1.0e-8)
             i += 1
 
