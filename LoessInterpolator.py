@@ -139,8 +139,8 @@ class LoessInterpolator(object):
         #  domain of 1..n) and the above calculation will give lambda ~ n / 2. We want the shape of the neighborhood
         #  weight function to be driven by width, not by the size of the domain, so we adjust lambda to be ~ width / 2.
         #  (The paper does this by multiplying the above lambda by (width / n). Not sure why the code is different.)
-        if _fWidth > _fData.len():
-            lambda_ += _fWidth - _fData.len() / 2
+        if self._fWidth > self._fData.len():
+            lambda_ += self._fWidth - self._fData.len() / 2
         #  "Neighborhood" is computed somewhat fuzzily.
         l999 = 0.999 * lambda_
         l001 = 0.001 * lambda_
@@ -248,7 +248,7 @@ class LinearLoessInterpolator(LoessInterpolator):
         x2Mean = 0.0
         i = left
         while i <= right:
-            x2Mean += _fWeights[i] * delta * delta
+            x2Mean += self._fWeights[i] * delta * delta
             i += 1
         #  Finding y(x) from the least-squares fit can be cast as a linear operation on the input data.
         #  This is implemented by updating the weights to include the least-squares weighting of the points.
@@ -258,7 +258,7 @@ class LinearLoessInterpolator(LoessInterpolator):
         range = len(fData)
         if x2Mean > 0.000001 * range * range:
             while i <= right:
-                _fWeights[i] *= (1.0 + beta * (i - xMean))
+                self._fWeights[i] *= (1.0 + beta * (i - xMean))
                 i += 1
 
 
@@ -329,7 +329,7 @@ class QuadraticLoessInterpolator(LoessInterpolator):
 
             i = left
             while i <= right:
-                _fWeights[i] *= (1 + a1 * (i - _x1Mean) + a2 * (i * i - _x2Mean))
+                self._fWeights[i] *= (1 + a1 * (i - _x1Mean) + a2 * (i * i - _x2Mean))
                 i += 1
 
 LoessInterpolator #      * class LoessInterpolator.Builder - Factory for LoessInterpolator objects
