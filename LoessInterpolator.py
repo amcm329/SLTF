@@ -139,8 +139,8 @@ class LoessInterpolator(object):
         #  domain of 1..n) and the above calculation will give lambda ~ n / 2. We want the shape of the neighborhood
         #  weight function to be driven by width, not by the size of the domain, so we adjust lambda to be ~ width / 2.
         #  (The paper does this by multiplying the above lambda by (width / n). Not sure why the code is different.)
-        if self._fWidth > self._fData.len():
-            lambda_ += self._fWidth - self._fData.len() / 2
+        if self._fWidth > len(self._fData):
+            lambda_ += self._fWidth - len(self._fData) / 2
         #  "Neighborhood" is computed somewhat fuzzily.
         l999 = 0.999 * lambda_
         l001 = 0.001 * lambda_
@@ -255,7 +255,7 @@ class LinearLoessInterpolator(LoessInterpolator):
         #  Note that this is only done if the points are spread out enough (variance > (0.001 * range)^2)
         #  to compute a slope. If not, we leave the weights alone and essentially fall back to a moving
         #  average of the data based on the neighborhood and external weights.
-        range = len(fData)
+        range = len(self.fData)
         if x2Mean > 0.000001 * range * range:
             while i <= right:
                 self._fWeights[i] *= (1.0 + beta * (i - xMean))
@@ -311,7 +311,7 @@ class QuadraticLoessInterpolator(LoessInterpolator):
         m4 = _x4Mean - _x2Mean * _x2Mean
 
         denominator = m2 * m4 - m3 * m3
-        range = _fData.len()
+        range = len(self._fData)
 
         if denominator > 0.000001 * range * range:
             #  TODO: Are there cases where denominator is too small but m2 is not too small?
