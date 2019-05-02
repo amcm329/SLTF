@@ -1,6 +1,5 @@
-import unittest
 from LoessInterpolator import LoessInterpolator
-import numpy as np
+
 
 
 
