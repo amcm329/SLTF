@@ -317,14 +317,14 @@ class SeasonalTrendLoess:
             if data is None:
                 raise ValueError("SeasonalTrendLoess.Builder: Data array must be non-null")
             if self.fPeriodLength is None:
-                raise ValueError("SeasonalTrendLoess.Builder: Period Length must be specified")
+                raise NameError("SeasonalTrendLoess.Builder: Period Length must be specified")
             if len(data) < 2 * self.fPeriodLength:
                 raise ValueError("SeasonalTrendLoess.Builder: Data series must be at least 2 * periodicity in length")
             if self.fPeriodic:
                 if self.fSeasonalWidth is not None and not periodicConsistent:
-                    raise ValueError("SeasonalTrendLoess.Builder: setSeasonalWidth and setPeriodic cannot both be called.")
+                    raise NameError("SeasonalTrendLoess.Builder: setSeasonalWidth and setPeriodic cannot both be called.")
                 if self.fSeasonalDegree is not None and not periodicConsistent:
-                    raise ValueError("SeasonalTrendLoess.Builder: setSeasonalDegree and setPeriodic cannot both be called.")
+                    raise NameError("SeasonalTrendLoess.Builder: setSeasonalDegree and setPeriodic cannot both be called.")
                 if self.fSeasonalJump is not None:
                     raise ValueError("SeasonalTrendLoess.Builder: setSeasonalJump and setPeriodic cannot both be called.")
             else:
@@ -332,16 +332,16 @@ class SeasonalTrendLoess:
                     raise ValueError("SeasonalTrendLoess.Builder: setSeasonalWidth or setPeriodic must be called.")
             if self.fFlatTrend:
                 if self.fTrendWidth is not None and not flatTrendConsistent:
-                    raise ValueError("SeasonalTrendLoess.Builder: setTrendWidth incompatible with flat trend.")
+                    raise NameError("SeasonalTrendLoess.Builder: setTrendWidth incompatible with flat trend.")
                 if self.fTrendDegree is not None and not flatTrendConsistent:
-                    raise ValueError("SeasonalTrendLoess.Builder: setTrendDegree incompatible with flat trend.")
+                    raise NameError("SeasonalTrendLoess.Builder: setTrendDegree incompatible with flat trend.")
                 if self.fTrendJump is not None:
                     raise ValueError("SeasonalTrendLoess.Builder: setTrendJump incompatible with flat trend.")
             if self.fLinearTrend:
                 if self.fTrendWidth is not None and not linearTrendConsistent:
-                    raise ValueError("SeasonalTrendLoess.Builder: setTrendWidth incompatible with linear trend.")
+                    raise NameError("SeasonalTrendLoess.Builder: setTrendWidth incompatible with linear trend.")
                 if self.fTrendDegree is not None and not linearTrendConsistent:
-                    raise ValueError("SeasonalTrendLoess.Builder: setTrendDegree incompatible with linear trend.")
+                    raise NameError("SeasonalTrendLoess.Builder: setTrendDegree incompatible with linear trend.")
                 if self.fTrendJump is not None:
                     raise ValueError("SeasonalTrendLoess.Builder: setTrendJump incompatible with linear trend.")
 
@@ -623,12 +623,16 @@ class SeasonalTrendLoess:
         trend = trendSmoother.smooth()
 
     def __str__(self):
-        return String.format("SeasonalTrendLoess: [\n" +
-                                                   "inner iterations     = %d\n" +
-                                                    "outer iterations     = %d\n" + 
-                                                    "periodicity          = %d\n" + 
-                                                    "seasonality settings = %s\n" + 
-                                                    "trend settings       = %s\n" + 
-                                                    "lowpass settings     = %s\n]", 
-                             self.fInnerIterations, self.fRobustIterations, self.fPeriodLength, self.fSeasonalSettings, self.fTrendSettings, self.fLowpassSettings)
+        return ("SeasonalTrendLoess: [\n" +
+                                     "inner iterations     = {}\n" +
+                                     "outer iterations     = {}\n" + 
+                                     "periodicity          = {}\n" + 
+                                     "seasonality settings = {}\n" + 
+                                     "trend settings       = {}\n" + 
+                                     "lowpass settings     = {}\n]").format(self.fInnerIterations, 
+                                                                           self.fRobustIterations, 
+                                                                           self.fPeriodLength, 
+                                                                           self.fSeasonalSettings, 
+                                                                           self.fTrendSettings, 
+                                                                           self.fLowpassSettings)
 

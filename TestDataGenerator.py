@@ -47,7 +47,7 @@ class TestDataGenerator:
     def createNoisySeasonalData(self, length, period, seasonalAmplitude, trendSlope, noiseSigma, seed):
         """ generated source for method createNoisySeasonalData """
         self.seed = seed
-        np.random.seed(seed)
+        np.random.seed(self.seed)
         dx = 2 * math.pi / period
         x = (np.r_[range(length)] * dx)
         e = noiseSigma * np.random.normal(size=length)

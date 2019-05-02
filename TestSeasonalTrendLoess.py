@@ -69,7 +69,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         """ generated source for method nonRobustRegressionTest """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fNonRobustNoisySinusoidResults[i,0]
+            data[i] = self.fNonRobustNoisySinusoidResults[i,0]
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12).setSeasonalWidth(7)
         builder.setInnerIterations(2).setRobustnessIterations(0)
         smoother = builder.buildSmoother(data)
@@ -80,16 +80,16 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         residuals = stl.getResidual()
         weights = stl.getWeights()
         for i in range(len(data)):
-            self.assertAlmostEqual(String.format("trend[%d]", i), fNonRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
-            self.assertAlmostEqual(String.format("seasonal[%d]", i), fNonRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
-            self.assertAlmostEqual(String.format("residuals[%d]", i), fNonRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
+            self.assertAlmostEqual(String.format("trend[%d]", i), self.fNonRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
+            self.assertAlmostEqual(String.format("seasonal[%d]", i), self.fNonRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
+            self.assertAlmostEqual(String.format("residuals[%d]", i), self.fNonRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
             self.assertAlmostEqual(1.0, weights[i], delta=1.0e-13)
 
     def test_forcedPeriodicityTest(self):
         """ generated source for method forcedPeriodicityTest """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fNonRobustNoisySinusoidResults[i,0]
+            data[i] = self.fNonRobustNoisySinusoidResults[i,0]
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12)
         builder.setSeasonalWidth(100000001).setSeasonalDegree(0).setSeasonalJump(100000001)
         builder.setTrendWidth(23)
@@ -107,7 +107,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         """ generated source for method setPeriodicTest """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fNonRobustNoisySinusoidResults[i,0]
+            data[i] = self.fNonRobustNoisySinusoidResults[i,0]
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12)
         builder.setPeriodic()
         builder.setTrendWidth(23)
@@ -125,7 +125,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         """ generated source for method forcedPeriodicityTest2 """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fNonRobustNoisySinusoidResults[i,0]
+            data[i] = self.fNonRobustNoisySinusoidResults[i,0]
 
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12)
         builder = builder.setSeasonalWidth(100000001).setSeasonalDegree(0).setSeasonalJump(100000001)
@@ -191,7 +191,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         """ generated source for method robustRegressionTest """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fRobustNoisySinusoidResults[i,0]
+            data[i] = self.fRobustNoisySinusoidResults[i,0]
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12).setSeasonalWidth(7)
         builder.setInnerIterations(1).setRobustnessIterations(1)
         smoother = builder.buildSmoother(data)
@@ -249,60 +249,74 @@ class SeasonalTrendLoessTest(unittest.TestCase):
 
     def test_periodicityMustBeAtLeastTwo(self):
         """ generated source for method periodicityMustBeAtLeastTwo """
-        SeasonalTrendLoess.Builder().setPeriodLength(1)
+        with self.assertRaises(ValueError):
+        	SeasonalTrendLoess.Builder().setPeriodLength(1)
 
     def test_dataMustHaveAtLeastTwoPeriods(self):
         """ generated source for method dataMustHaveAtLeastTwoPeriods """
-        data = self.testDataGenerator.createNoisySeasonalData(144, 12, 1.0, 0.0, 0.0, 123L)
-        SeasonalTrendLoess.Builder().setPeriodLength(120).setSeasonalWidth(999).setNonRobust().buildSmoother(data)
+        data = self.testDataGenerator.createNoisySeasonalData(144, 12, 1.0, 0.0, 0.0, 123)
+        with self.assertRaises(ValueError):
+        	SeasonalTrendLoess.Builder().setPeriodLength(120).setSeasonalWidth(999).setNonRobust().buildSmoother(data)
 
     def test_nullDataThrows(self):
         """ generated source for method nullDataThrows """
-        SeasonalTrendLoess.Builder().setPeriodLength(120).setSeasonalWidth(999).buildSmoother(None)
+        with self.assertRaises(ValueError):
+        	SeasonalTrendLoess.Builder().setPeriodLength(120).setSeasonalWidth(999).buildSmoother(None)
 
     def test_seasonalWidthMustBeSet(self):
         """ generated source for method seasonalWidthMustBeSet """
-        SeasonalTrendLoess.Builder().setPeriodLength(120).buildSmoother(np.zeros(2000))
+        with self.assertRaises(ValueError):
+        	SeasonalTrendLoess.Builder().setPeriodLength(120).buildSmoother(np.zeros(2000))
 
     def test_periodLengthMustBeSet(self):
         """ generated source for method periodLengthMustBeSet """
-        SeasonalTrendLoess.Builder().setSeasonalWidth(999).buildSmoother(np.zeros(2000))
+        with self.assertRaises(NameError):
+        	SeasonalTrendLoess.Builder().setSeasonalWidth(999).buildSmoother(np.zeros(2000))
 
     def test_setPeriodicDisallowsSeasonalWidth(self):
         """ generated source for method setPeriodicDisallowsSeasonalWidth """
-        getTestBuilder().setSeasonalWidth(999).buildSmoother(np.zeros(2000))
+        with self.assertRaises(NameError):
+        	self.test_getTestBuilder().setSeasonalWidth(999).buildSmoother(np.zeros(2000))
 
     def test_setPeriodicDisallowsSeasonalJump(self):
         """ generated source for method setPeriodicDisallowsSeasonalJump """
-        getTestBuilder().setSeasonalDegree(2).buildSmoother(np.zeros(2000))
+        with self.assertRaises(NameError):
+        	self.test_getTestBuilder().setSeasonalDegree(2).buildSmoother(np.zeros(2000))
 
     def test_setPeriodicDisallowsSeasonalDegree(self):
         """ generated source for method setPeriodicDisallowsSeasonalDegree """
-        getTestBuilder().setSeasonalJump(1).buildSmoother(np.zeros(2000))
+        with self.assertRaises(ValueError):
+        	self.test_getTestBuilder().setSeasonalJump(1).buildSmoother(np.zeros(2000))
 
     def test_setFlatTrendDisallowsTrendWidth(self):
         """ generated source for method setFlatTrendDisallowsTrendWidth """
-        getTestBuilder().setFlatTrend().setTrendWidth(999).buildSmoother(np.zeros(2000))
+        with self.assertRaises(NameError):
+        	self.test_getTestBuilder().setFlatTrend().setTrendWidth(999).buildSmoother(np.zeros(2000))
 
     def test_setFlatTrendDisallowsTrendJump(self):
         """ generated source for method setFlatTrendDisallowsTrendJump """
-        getTestBuilder().setFlatTrend().setTrendJump(1).buildSmoother(np.zeros(2000))
+        with self.assertRaises(ValueError):
+        	self.test_getTestBuilder().setFlatTrend().setTrendJump(1).buildSmoother(np.zeros(2000))
 
     def test_setFlatTrendDisallowsTrendDegree(self):
         """ generated source for method setFlatTrendDisallowsTrendDegree """
-        getTestBuilder().setFlatTrend().setTrendDegree(2).buildSmoother(np.zeros(2000))
+        with self.assertRaises(NameError):
+        	self.test_getTestBuilder().setFlatTrend().setTrendDegree(2).buildSmoother(np.zeros(2000))
 
     def test_setLinearTrendDisallowsTrendWidth(self):
         """ generated source for method setLinearTrendDisallowsTrendWidth """
-        getTestBuilder().setLinearTrend().setTrendWidth(999).buildSmoother(np.zeros(2000))
+        with self.assertRaises(NameError):
+        	self.test_getTestBuilder().setLinearTrend().setTrendWidth(999).buildSmoother(np.zeros(2000))
 
     def test_setLinearTrendDisallowsTrendJump(self):
         """ generated source for method setLinearTrendDisallowsTrendJump """
-        getTestBuilder().setLinearTrend().setTrendJump(1).buildSmoother(np.zeros(2000))
+        with self.assertRaises(ValueError):
+        	self.test_getTestBuilder().setLinearTrend().setTrendJump(1).buildSmoother(np.zeros(2000))
 
     def test_setLinearTrendDisallowsTrendDegree(self):
         """ generated source for method setLinearTrendDisallowsTrendDegree """
-        getTestBuilder().setLinearTrend().setTrendDegree(2).buildSmoother(np.zeros(2000))
+        with self.assertRaises(NameError):
+        	self.test_getTestBuilder().setLinearTrend().setTrendDegree(2).buildSmoother(np.zeros(2000))
 
     def test_getTestBuilder(self):
         """ generated source for method getTestBuilder """
@@ -327,17 +341,17 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         s2sum = 0.0
         for i in range(len(data)):
         	r = residuals[i]
-            rsum += r
-            r2sum += r * r
-            d = data[i]
-            dsum += d
-            d2sum += d * d
-            t = trend[i]
-            tsum += t
-            t2sum += t * t
-            s = seasonal[i]
-            ssum += s
-            s2sum += s * s
+        	rsum += r
+        	r2sum += r * r
+        	d = data[i]
+        	dsum += d
+        	d2sum += d * d
+        	t = trend[i]
+        	tsum += t
+        	t2sum += t * t
+        	s = seasonal[i]
+        	ssum += s
+        	s2sum += s * s
 
         trendMean = tsum / len(data)
         trendVar = (t2sum - trendMean * trendMean) / (len(data) - 1)
@@ -350,7 +364,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         stlMean = seasonalMean + trendMean + resMean
         self.assertAlmostEqual(dataMean, stlMean, delta=1.0e-8)
         stlVar = seasonalVar + trendVar + resVar
-        print "     \t\tmean\tvariance"
+        print("     \t\tmean\tvariance")
         print("data     \t{}\t{}".format(dataMean, dataVar))
         print("seasonal \t{}\t{}".format(seasonalMean, seasonalVar))
         print("trend    \t{}\t{}".format(trendMean, trendVar))
@@ -368,8 +382,8 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         r2sum = 0.0
         for i in range(len(data)):
         	r = residuals[i]
-            rsum += r
-            r2sum += r * r
+        	rsum += r
+        	r2sum += r * r
         mean = rsum / len(data)
         variance = (r2sum - rsum * rsum) / (len(data) - 1)
         print("Residual has mean {} and variance {}".format(mean, variance))
