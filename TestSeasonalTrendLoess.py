@@ -4,6 +4,7 @@
 import unittest
 from SeasonalTrendLoess import SeasonalTrendLoess
 from TestDataGenerator import TestDataGenerator
+from SimulatedWeeklyMetric import SimulatedWeeklyMetric
 import numpy as np
 
 # 
@@ -178,13 +179,13 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         residuals = stl.getResidual()
         for i in range(len(data)):
             if i != 100:
-                self.assertAlmostEqual(String.format("seasonal[%d]", i), data[i], seasonal[i], delta=epsilon)
-                self.assertAlmostEqual(String.format("trend[%d]", i), 0.0, trend[i], delta=epsilon)
-                self.assertAlmostEqual(String.format("residuals[%d]", i), 0.0, residuals[i], delta=epsilon)
+                self.assertAlmostEqual("seasonal[{}]".format(i), data[i], seasonal[i], delta=epsilon)
+                self.assertAlmostEqual("trend[{}]".format(i), 0.0, trend[i], delta=epsilon)
+                self.assertAlmostEqual("residuals[{}]".format(i), 0.0, residuals[i], delta=epsilon)
             else:
-                self.assertAlmostEqual(String.format("seasonal[%d]", i), data[i - 12], seasonal[i], delta=epsilon)
-                self.assertAlmostEqual(String.format("trend[%d]", i), 0.0, trend[i], delta=epsilon)
-                self.assertAlmostEqual(String.format("residuals[%d]", i), 1.0, residuals[i] / 1000.0, delta=1.0e-3)
+                self.assertAlmostEqual("seasonal[{}]".format(i), data[i - 12], seasonal[i], delta=epsilon)
+                self.assertAlmostEqual("trend[{}]".format(i), 0.0, trend[i], delta=epsilon)
+                self.assertAlmostEqual("residuals[{}]".format(i), 1.0, residuals[i] / 1000.0, delta=1.0e-3)
 
     def test_robustRegressionTest(self):
         """ generated source for method robustRegressionTest """
@@ -200,9 +201,9 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         seasonal = stl.getSeasonal()
         residuals = stl.getResidual()
         for i in range(len(data)):
-            self.assertAlmostEqual(String.format("seasonal[%d]", i), fRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
-            self.assertAlmostEqual(String.format("trend[%d]", i), fRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
-            self.assertAlmostEqual(String.format("residuals[%d]", i), fRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
+            self.assertAlmostEqual("seasonal[{}]".format(i), fRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
+            self.assertAlmostEqual("trend[{}]".format(i), fRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
+            self.assertAlmostEqual("residuals[{}]".format(i), fRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
 
     def test_periodicBuilderCanBeReused(self):
         """ generated source for method periodicBuilderCanBeReused """

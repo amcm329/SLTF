@@ -41,8 +41,8 @@ class TestDataGenerator:
 
     def createNoisySeasonalDataWithTimeSeed(self, length, period, seasonalAmplitude, trendSlope, noiseSigma):
         """ generated source for method createNoisySeasonalDataWithTimeSeed """
-        time = int(round(time.time() * 1000))
-        return createNoisySeasonalData(length, period, seasonalAmplitude, trendSlope, noiseSigma, time)
+        times = int(round(time.time()))
+        return self.createNoisySeasonalData(length, period, seasonalAmplitude, trendSlope, noiseSigma, times)
 
     def createNoisySeasonalData(self, length, period, seasonalAmplitude, trendSlope, noiseSigma, seed):
         """ generated source for method createNoisySeasonalData """
