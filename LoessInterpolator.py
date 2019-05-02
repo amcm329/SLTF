@@ -80,7 +80,7 @@ class LoessInterpolator(object):
         #  Ordinarily, one doesn't do linear regression one x-value at a time, but LOESS does since
         #  each x-value will typically have a different window. As a result, the weighted linear regression
         #  is recast as a linear operation on the input data, weighted by this.fWeights.
-        state = computeNeighborhoodWeights(x, left, right)
+        state = self.computeNeighborhoodWeights(x, left, right)
         if state == State._WEIGHTS_FAILED:
             return None
         if state == State._LINEAR_OK:
