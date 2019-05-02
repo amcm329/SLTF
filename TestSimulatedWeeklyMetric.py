@@ -1,4 +1,4 @@
-class SimulatedWeeklyMetric:
+class TestSimulatedWeeklyMetric:
 
 	def getValues():
 		return [10.19, 11.28, 10.79, 11.16, 11.64, 9.53, 10.94, 10.25, 10.88, 10.66, 10.74, 11.91, 10.63, 10.76, 10.66,

@@ -4,7 +4,7 @@
 import unittest
 from SeasonalTrendLoess import SeasonalTrendLoess
 from TestDataGenerator import TestDataGenerator
-from SimulatedWeeklyMetric import SimulatedWeeklyMetric
+from TestSimulatedWeeklyMetric import TestSimulatedWeeklyMetric
 import numpy as np
 
 # 
@@ -207,7 +207,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
 
     def test_periodicBuilderCanBeReused(self):
         """ generated source for method periodicBuilderCanBeReused """
-        data = SimulatedWeeklyMetric.getFourWeekValues()
+        data = TestSimulatedWeeklyMetric.getFourWeekValues()
         periodicity = 1008
         builder = SeasonalTrendLoess.Builder()
         builder.setPeriodLength(periodicity).setRobust().setPeriodic().setFlatTrend()
@@ -221,7 +221,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
 
     def test_linearTrendBuilderCanBeReused(self):
         """ generated source for method linearTrendBuilderCanBeReused """
-        data = SimulatedWeeklyMetric.getFourWeekValues()
+        data = TestSimulatedWeeklyMetric.getFourWeekValues()
         periodicity = 1008
         builder = SeasonalTrendLoess.Builder()
         builder.setPeriodLength(periodicity).setRobust().setLinearTrend().setSeasonalWidth(101)
@@ -235,7 +235,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
 
     def test_flatTrendBuilderCanBeReused(self):
         """ generated source for method flatTrendBuilderCanBeReused """
-        data = SimulatedWeeklyMetric.getFourWeekValues()
+        data = TestSimulatedWeeklyMetric.getFourWeekValues()
         periodicity = 1008
         builder = SeasonalTrendLoess.Builder()
         builder.setPeriodLength(periodicity).setRobust().setFlatTrend().setSeasonalWidth(101)
