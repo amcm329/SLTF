@@ -67,7 +67,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         """ generated source for method nonRobustRegressionTest """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fNonRobustNoisySinusoidResults[i][0]
+            data[i] = fNonRobustNoisySinusoidResults[i,0]
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12).setSeasonalWidth(7)
         builder.setInnerIterations(2).setRobustnessIterations(0)
         smoother = builder.buildSmoother(data)
@@ -87,7 +87,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         """ generated source for method forcedPeriodicityTest """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fNonRobustNoisySinusoidResults[i][0]
+            data[i] = fNonRobustNoisySinusoidResults[i,0]
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12)
         builder.setSeasonalWidth(100000001).setSeasonalDegree(0).setSeasonalJump(100000001)
         builder.setTrendWidth(23)
@@ -105,7 +105,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         """ generated source for method setPeriodicTest """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fNonRobustNoisySinusoidResults[i][0]
+            data[i] = fNonRobustNoisySinusoidResults[i,0]
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12)
         builder.setPeriodic()
         builder.setTrendWidth(23)
@@ -123,7 +123,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         """ generated source for method forcedPeriodicityTest2 """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fNonRobustNoisySinusoidResults[i][0]
+            data[i] = fNonRobustNoisySinusoidResults[i,0]
 
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12)
         builder = builder.setSeasonalWidth(100000001).setSeasonalDegree(0).setSeasonalJump(100000001)
@@ -189,7 +189,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         """ generated source for method robustRegressionTest """
         data = np.zeros(144)
         for i in range(len(data)):
-            data[i] = fRobustNoisySinusoidResults[i][0]
+            data[i] = fRobustNoisySinusoidResults[i,0]
         builder = SeasonalTrendLoess.Builder().setPeriodLength(12).setSeasonalWidth(7)
         builder.setInnerIterations(1).setRobustnessIterations(1)
         smoother = builder.buildSmoother(data)
@@ -396,7 +396,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         for i in range(len(data)):
             print("{} {}  \t{}  \t{}  \t{}  \t{}".format(i, data[i], trend[i], seasonal[i], residuals[i], weights[i]))
 
-    fNonRobustNoisySinusoidResults = [[ 1.34006384538, 1.05868325038, -0.637510654892, 0.918891249895, 1.0 ],
+    fNonRobustNoisySinusoidResults = np.array([[ 1.34006384538, 1.05868325038, -0.637510654892, 0.918891249895, 1.0 ],
 			[ 3.97126146325, 1.36552711582, 2.12635406017, 0.479380287255, 1.0 ],
 			[ 11.9840016758, 1.67237098126, 11.2169231848, -0.905292490221, 1.0 ],
 			[ 13.9575483181, 1.97921484671, 11.5329348655, 0.445398605914, 1.0 ],
@@ -539,9 +539,9 @@ class SeasonalTrendLoessTest(unittest.TestCase):
 			[ 66.1529306932, 73.2187892065, -7.92211077793, 0.85625226465, 1.0 ],
 			[ 64.2350467473, 73.7270139354, -9.06147234997, -0.430494838099, 1.0 ],
 			[ 62.8779891919, 74.2340184888, -10.8613368773, -0.494692419587, 1.0 ],
-			[ 66.4852654904, 74.7410230421, -7.71329348619, -0.542464065513, 1.0 ]]
+			[ 66.4852654904, 74.7410230421, -7.71329348619, -0.542464065513, 1.0 ]])
 
-    fRobustNoisySinusoidResults = [[ -3.0189282813436, -0.0800823669536, -1.8687115842137, -1.0701343301763, 0.9412570824278 ],
+    fRobustNoisySinusoidResults = np.array([[ -3.0189282813436, -0.0800823669536, -1.8687115842137, -1.0701343301763, 0.9412570824278 ],
 			[ 5.0778409942246, 0.5361271455863, 4.9127196692433, -0.3710058206049, 0.9967002109896 ],
 			[ 7.8291237106354, 1.1523366581261, 7.6955453238228, -1.0187582713135, 0.8717585393042 ],
 			[ 14.5176959771249, 1.7685461706660, 12.3074529116668, 0.4416968947921, 0.9857639268194 ],
@@ -684,7 +684,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
 			[ 64.9662035129925, 73.6123687004921, -8.1770227106402, -0.4691424768594, 0.9868688732507 ],
 			[ 65.0445849452249, 74.2483774618237, -9.1084355898637, -0.0953569267351, 0.9991806127263 ],
 			[ 65.7903118858262, 74.8842576457032, -7.5873830049575, -1.5065627549194, 0.8091664150188 ],
-			[ 71.6003290025845, 75.5201378295826, -4.8318733281443, 0.9120645011462, 0.9628298432660 ]]
+			[ 71.6003290025845, 75.5201378295826, -4.8318733281443, 0.9120645011462, 0.9628298432660 ]])
 
 if __name__ == '__main__':
     unittest.main()
