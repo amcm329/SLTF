@@ -594,9 +594,9 @@ class SeasonalTrendLoess:
 		# extendedSeasonal.length == data.length + 2 * periodicity
 		#
 		# and the length after each pass is.................................
-        pass1 = simpleMovingAverage(self.fExtendedSeasonal, self.fPeriodLength)
-        pass2 = simpleMovingAverage(pass1, self.fPeriodLength)
-        pass3 = simpleMovingAverage(pass2, 3)
+        pass1 = TimeSeriesUtilities.simpleMovingAverage(self.fExtendedSeasonal, self.fPeriodLength)
+        pass2 = TimeSeriesUtilities.simpleMovingAverage(pass1, self.fPeriodLength)
+        pass3 = TimeSeriesUtilities.simpleMovingAverage(pass2, 3)
 
         lowPassLoess = self.fLowpassLoessFactory.setData(pass3).build()
         self.fDeSeasonalized = lowPassLoess.smooth()

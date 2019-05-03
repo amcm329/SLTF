@@ -13,7 +13,8 @@
 #import smoot.py as LoessSmoother
 
 #@SuppressWarnings("WeakerAccess")
-import math 
+import math
+import numpy as np
 
 from LoessInterpolator import LoessInterpolator
 
@@ -97,7 +98,7 @@ class LoessSmoother:
         self.fData = data
         self.fJump = min(jump, len(data))
         self.fWidth = width
-        self.fSmoothed = [float(len(data))]
+        self.fSmoothed = np.zeros(len(data))
 
        
 
@@ -113,26 +114,26 @@ class LoessSmoother:
         right = -1
         if self.fWidth >= len(self.fData):
             left = 0
-            right = len(self.fData)
-            for i in range(len(self.fData)):
+            right = len(self.fData) - 1
+            for i in range(0,len(self.fData),self.fJump):
                 self.y = self.fInterpolator.smoothOnePoint(i, left, right)
-                self.fSmoothed[i] = self.fData[i] if self.y == None else self.y
+                self.fSmoothed[i] = self.fData[i] if self.y is None else self.y
 
         elif self.fJump == 1:
             halfWidth = int((self.fWidth + 1) / 2)
             left = 0
             right = self.fWidth - 1
             for i in range(len(self.fData)):
-                if i >= halfWidth and right != len(self.fData):
+                if i >= halfWidth and right != (len(self.fData)-1):
                     left += 1
                     right += 1
                 self.y = self.fInterpolator.smoothOnePoint(i, left, right)
-                self.fSmoothed[i] = self.fData[i] if self.y == None else self.y
+                self.fSmoothed[i] = self.fData[i] if self.y is None else self.y
                 
         else:
             halfWidth = int((self.fWidth + 1) / 2)
-            for i in range(len(self.fData)):
-                if i < halfWidth - 1:
+            for i in range(0,len(self.fData),self.fJump):
+                if i < (halfWidth - 1):
                     left = 0
                 elif i >= (len(self.fData) - halfWidth):
                     left = len(self.fData) - self.fWidth
@@ -140,23 +141,21 @@ class LoessSmoother:
                     left = i - halfWidth + 1
                 right = left + self.fWidth - 1
                 self.y = self.fInterpolator.smoothOnePoint(i, left, right)
-                self.fSmoothed[i] = self.fData[i] if self.y == None else self.y
+                self.fSmoothed[i] = self.fData[i] if self.y is None else self.y
         
         if self.fJump != 1:
-            for i in range(len(self.fData - self.fJump)):
-                slope = (fSmoothed[i + self.fJump] - fSmoothed[i]) / float(fJump)
-                for j in range(i + self.fJump):
+            for i in range(0, len(self.fData) - self.fJump, self.fJump):
+                slope = (self.fSmoothed[i + self.fJump] - self.fSmoothed[i]) / float(self.fJump)
+                for j in range(i+1, i + self.fJump):
                     self.fSmoothed[j] = self.fSmoothed[i] + slope * (j - i)
             last = int(len(self.fData) - 1);
-            lastSmoothedPos = int((last / fJump) * fJump);
+            lastSmoothedPos = int((last / self.fJump) * self.fJump);
             if lastSmoothedPos != last:
-                self.y = self.fInterpolator.smoothOnePoint(i, left, right)
-                self.fSmoothed[last] = self.fData[last] if self.y == None else self.y
-                if lastSmoothedPos != last - 1:
-                    slope = (fSmoothed[last] - fSmoothed[lastSmoothedPos]) / (last - lastSmoothedPos);
-                    j = lastSmoothedPos + 1
-                    while j < last:            
+                self.y = self.fInterpolator.smoothOnePoint(last, left, right)
+                self.fSmoothed[last] = self.fData[last] if self.y is None else self.y
+                if lastSmoothedPos != (last - 1):
+                    slope = (self.fSmoothed[last] - self.fSmoothed[lastSmoothedPos]) / (last - lastSmoothedPos);
+                    for j in range(lastSmoothedPos + 1, j < last):            
                         self.fSmoothed[j] = self.fSmoothed[lastSmoothedPos] + slope * (j - lastSmoothedPos)
-                        j = j +1
         return self.fSmoothed
 

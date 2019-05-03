@@ -81,10 +81,10 @@ class LoessInterpolator(object):
         #  each x-value will typically have a different window. As a result, the weighted linear regression
         #  is recast as a linear operation on the input data, weighted by this.fWeights.
         state = self.computeNeighborhoodWeights(x, left, right)
-        if state == State._WEIGHTS_FAILED:
+        if state == self.State()._WEIGHTS_FAILED:
             return None
-        if state == State._LINEAR_OK:
-            updateWeights(x, left, right)
+        if state == self.State()	._LINEAR_OK:
+            self.updateWeights(x, left, right)
         ys = 0.0
         i = left
         while i <= right:
@@ -114,7 +114,7 @@ class LoessInterpolator(object):
     class State:
         """ generated source for enum State """
 
-        def __init__():
+        def __init__(self):
             self._WEIGHTS_FAILED = 'WEIGHTS_FAILED'
             self._LINEAR_FAILED = 'LINEAR_FAILED'
             self._LINEAR_OK = 'LINEAR_OK'
@@ -140,7 +140,7 @@ class LoessInterpolator(object):
         #  weight function to be driven by width, not by the size of the domain, so we adjust lambda to be ~ width / 2.
         #  (The paper does this by multiplying the above lambda by (width / n). Not sure why the code is different.)
         if self._fWidth > len(self._fData):
-            lambda_ += self._fWidth - len(self._fData) / 2
+            lambda_ += (self._fWidth - len(self._fData)) / 2
         #  "Neighborhood" is computed somewhat fuzzily.
         l999 = 0.999 * lambda_
         l001 = 0.001 * lambda_
@@ -149,12 +149,13 @@ class LoessInterpolator(object):
         j = left
         while j <= right:
             #  Compute the tri-cube neighborhood weight
-            delta = x -j 
+            delta = abs(x -j)
+            weight = 0.0
             if delta <= l999:
                 if delta <= l001:
                     weight = 1.0
                 else:
-                    fraction = delta / _lambda
+                    fraction = delta / lambda_
                     trix = 1.0 - fraction * fraction * fraction
                     weight = trix * trix * trix
                 #  If external weights are provided, apply them.
@@ -165,13 +166,13 @@ class LoessInterpolator(object):
             j += 1
         #  If the total weight is 0, we can't proceed, so signal failure.
         if totalWeight <= 0.0:
-            return self.State._WEIGHTS_FAILED
+            return self.State()._WEIGHTS_FAILED
         #  Normalize the weights
         j = left
         while j <= right:
             self._fWeights[j] /= totalWeight
             j += 1
-        return self.State._LINEAR_OK if (lambda_ > 0) else self.State._LINEAR_FAILED
+        return self.State()._LINEAR_OK if (lambda_ > 0) else self.State()._LINEAR_FAILED
 
     # 
     #    * Create a LoessInterpolator interpolator for the given data set with the specified smoothing width and
@@ -189,7 +190,7 @@ class LoessInterpolator(object):
         self._fWidth = width
         self._fData = data
         self._fExternalWeights = externalWeights
-        self._fWeights = [None]
+        self._fWeights = [[]]*len(self._fData)
 
 
 class FlatLoessInterpolator(LoessInterpolator):
@@ -204,7 +205,7 @@ class FlatLoessInterpolator(LoessInterpolator):
     #    
     def __init__(self, width, data, externalWeights):
         """ generated source for method __init__ """
-        super(FlatLoessInterpolator, self).__init__(externalWeights)
+        super(FlatLoessInterpolator, self).__init__(width, data, externalWeights)
 
     # 
     #    * Weight update for FlatLinearInterpolator is a no-op.
@@ -243,19 +244,20 @@ class LinearLoessInterpolator(LoessInterpolator):
 
         i = left
         while i <= right:
-            xMean += i * _fWeights[i]
+            xMean += i * self._fWeights[i]
             i += 1
         x2Mean = 0.0
         i = left
         while i <= right:
-            x2Mean += self._fWeights[i] * delta * delta
-            i += 1
+        	delta = i - xMean
+        	x2Mean += self._fWeights[i] * delta * delta
+        	i += 1
         #  Finding y(x) from the least-squares fit can be cast as a linear operation on the input data.
         #  This is implemented by updating the weights to include the least-squares weighting of the points.
         #  Note that this is only done if the points are spread out enough (variance > (0.001 * range)^2)
         #  to compute a slope. If not, we leave the weights alone and essentially fall back to a moving
         #  average of the data based on the neighborhood and external weights.
-        range = len(self.fData)
+        range = len(self._fData)
         if x2Mean > 0.000001 * range * range:
             while i <= right:
                 self._fWeights[i] *= (1.0 + beta * (i - xMean))
@@ -274,7 +276,7 @@ class QuadraticLoessInterpolator(LoessInterpolator):
     #    
     def __init__(self, width, data, externalWeights):
         """ generated source for method __init__ """
-        super(QuadraticLoessInterpolator, self).__init__(externalWeights)
+        super(QuadraticLoessInterpolator, self).__init__(width, data, externalWeights)
 
     # 
     #    * Compute weighted least squares quadratic fit to the data points and adjust the weights with the results.
@@ -332,5 +334,5 @@ class QuadraticLoessInterpolator(LoessInterpolator):
                 self._fWeights[i] *= (1 + a1 * (i - _x1Mean) + a2 * (i * i - _x2Mean))
                 i += 1
 
-LoessInterpolator #      * class LoessInterpolator.Builder - Factory for LoessInterpolator objects
+#LoessInterpolator #      * class LoessInterpolator.Builder - Factory for LoessInterpolator objects
 

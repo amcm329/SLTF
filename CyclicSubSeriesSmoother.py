@@ -115,7 +115,7 @@ class CyclicSubSeriesSmoother:
         for period in range(self._fPeriodLength):
               #++period
               cycleLength = (self._fNumPeriods + 1) if period < self._fRemainder else self._fNumPeriods
-              for i in range(self._fNumPeriodsToExtrapolateBackward + cycleLength + self._fNumPeriodsToExtrapolateForward):
+              for i in range(self._fNumPeriodsToExtrapolateBackward + int(cycleLength) + self._fNumPeriodsToExtrapolateForward):
                     #++i 
                     data[i * self._fPeriodLength + period] = self._fSmoothedCyclicSubSeries[period][i]
 			
@@ -145,15 +145,14 @@ class CyclicSubSeriesSmoother:
         """
         #Copy, shifting by 1 to leave room for the extrapolated point at the beginning.
         #System.arraycopy(smoother.smooth(), 0, smoothedData, self._fNumPeriodsToExtrapolateBackward, cycleLength)
-
-        smoothedData[destPos:destPos + cycleLength] = smoother.smooth()[self._fNumPeriodsToExtrapolateBackward:self._fNumPeriodsToExtrapolateBackward + cycleLength]
+        smoothedData[self._fNumPeriodsToExtrapolateBackward:self._fNumPeriodsToExtrapolateBackward + cycleLength] = smoother.smooth()[:cycleLength]
           
         interpolator = smoother.getInterpolator()
 
         #Extrapolate from the leftmost "width" points to the "-1" position
         left = 0;
         right = left + self._fWidth - 1;
-        right = math.min(right, cycleLength - 1)
+        right = min(right, cycleLength - 1)
         leftValue = self._fNumPeriodsToExtrapolateBackward
 
         #es menor e igual
@@ -163,9 +162,9 @@ class CyclicSubSeriesSmoother:
 
             #Extrapolate from the rightmost "width" points to the "length" position (one past the array end).
             right = cycleLength - 1
-            left = right - sel._fWidth + 1
-            left = math.max(0, left)
-            rightValue = sel._fNumPeriodsToExtrapolateBackward + right
+            left = right - self._fWidth + 1
+            left = max(0, left)
+            rightValue = self._fNumPeriodsToExtrapolateBackward + right
 
             #es menor e igual
             for i in range(1,self._fNumPeriodsToExtrapolateForward + 1):
