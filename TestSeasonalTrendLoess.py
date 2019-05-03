@@ -6,6 +6,7 @@ from SeasonalTrendLoess import SeasonalTrendLoess
 from TestDataGenerator import TestDataGenerator
 from TestSimulatedWeeklyMetric import TestSimulatedWeeklyMetric
 import numpy as np
+import math
 
 # 
 #  * Integration tests for SeasonalTrendLoess (STL) decomposition.
@@ -80,9 +81,12 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         residuals = stl.getResidual()
         weights = stl.getWeights()
         for i in range(len(data)):
-            self.assertAlmostEqual(String.format("trend[%d]", i), self.fNonRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
-            self.assertAlmostEqual(String.format("seasonal[%d]", i), self.fNonRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
-            self.assertAlmostEqual(String.format("residuals[%d]", i), self.fNonRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
+            #self.assertAlmostEqual("trend[{}]".format(i), self.fNonRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
+            #self.assertAlmostEqual("seasonal[{}]".format(i), self.fNonRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
+            #self.assertAlmostEqual("residuals[{}]".format(i), self.fNonRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
+            self.assertAlmostEqual(self.fNonRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
+            self.assertAlmostEqual(self.fNonRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
+            self.assertAlmostEqual(self.fNonRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
             self.assertAlmostEqual(1.0, weights[i], delta=1.0e-13)
 
     def test_forcedPeriodicityTest(self):
@@ -179,13 +183,19 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         residuals = stl.getResidual()
         for i in range(len(data)):
             if i != 100:
-                self.assertAlmostEqual("seasonal[{}]".format(i), data[i], seasonal[i], delta=epsilon)
-                self.assertAlmostEqual("trend[{}]".format(i), 0.0, trend[i], delta=epsilon)
-                self.assertAlmostEqual("residuals[{}]".format(i), 0.0, residuals[i], delta=epsilon)
+                #self.assertAlmostEqual("seasonal[{}]".format(i), data[i], seasonal[i], delta=epsilon)
+                #self.assertAlmostEqual("trend[{}]".format(i), 0.0, trend[i], delta=epsilon)
+                #self.assertAlmostEqual("residuals[{}]".format(i), 0.0, residuals[i], delta=epsilon)
+                self.assertAlmostEqual(data[i], seasonal[i], delta=epsilon)
+                self.assertAlmostEqual(0.0, trend[i], delta=epsilon)
+                self.assertAlmostEqual(0.0, residuals[i], delta=epsilon)
             else:
-                self.assertAlmostEqual("seasonal[{}]".format(i), data[i - 12], seasonal[i], delta=epsilon)
-                self.assertAlmostEqual("trend[{}]".format(i), 0.0, trend[i], delta=epsilon)
-                self.assertAlmostEqual("residuals[{}]".format(i), 1.0, residuals[i] / 1000.0, delta=1.0e-3)
+                #self.assertAlmostEqual("seasonal[{}]".format(i), data[i - 12], seasonal[i], delta=epsilon)
+                #self.assertAlmostEqual("trend[{}]".format(i), 0.0, trend[i], delta=epsilon)
+                #self.assertAlmostEqual("residuals[{}]".format(i), 1.0, residuals[i] / 1000.0, delta=1.0e-3)
+                self.assertAlmostEqual(data[i - 12], seasonal[i], delta=epsilon)
+                self.assertAlmostEqual(0.0, trend[i], delta=epsilon)
+                self.assertAlmostEqual(1.0, residuals[i] / 1000.0, delta=1.0e-3)
 
     def test_robustRegressionTest(self):
         """ generated source for method robustRegressionTest """
@@ -201,9 +211,12 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         seasonal = stl.getSeasonal()
         residuals = stl.getResidual()
         for i in range(len(data)):
-            self.assertAlmostEqual("seasonal[{}]".format(i), fRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
-            self.assertAlmostEqual("trend[{}]".format(i), fRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
-            self.assertAlmostEqual("residuals[{}]".format(i), fRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
+            #self.assertAlmostEqual("seasonal[{}]".format(i), self.fRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
+            #self.assertAlmostEqual("trend[{}]".format(i), self.fRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
+            #self.assertAlmostEqual("residuals[{}]".format(i), self.fRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
+            self.assertAlmostEqual(self.fRobustNoisySinusoidResults[i][1], trend[i], delta=epsilon)
+            self.assertAlmostEqual(self.fRobustNoisySinusoidResults[i][2], seasonal[i], delta=epsilon)
+            self.assertAlmostEqual(self.fRobustNoisySinusoidResults[i][3], residuals[i], delta=epsilon)
 
     def test_periodicBuilderCanBeReused(self):
         """ generated source for method periodicBuilderCanBeReused """
@@ -402,15 +415,15 @@ class SeasonalTrendLoessTest(unittest.TestCase):
 							   "lowpass settings     = [width = 13, degree = 1, jump = 2]\n]", 
 				    stl.__str__())
 
-    def test_printStlResults(self, data, stl):
-        """ generated source for method printStlResults """
-        trend = stl.getTrend()
-        seasonal = stl.getSeasonal()
-        residuals = stl.getResidual()
-        weights = stl.getWeights()
-        print("{} {}  \t{}  \t{}  \t{}  \t{}", "index", "data", "trend", "seasonal", "residual", "weights")
-        for i in range(len(data)):
-            print("{} {}  \t{}  \t{}  \t{}  \t{}".format(i, data[i], trend[i], seasonal[i], residuals[i], weights[i]))
+    #def test_printStlResults(self, data, stl):
+    #    """ generated source for method printStlResults """
+    #    trend = stl.getTrend()
+    #    seasonal = stl.getSeasonal()
+    #    residuals = stl.getResidual()
+    #    weights = stl.getWeights()
+    #    print("{} {}  \t{}  \t{}  \t{}  \t{}", "index", "data", "trend", "seasonal", "residual", "weights")
+    #    for i in range(len(data)):
+    #        print("{} {}  \t{}  \t{}  \t{}  \t{}".format(i, data[i], trend[i], seasonal[i], residuals[i], weights[i]))
 
     fNonRobustNoisySinusoidResults = np.array([[ 1.34006384538, 1.05868325038, -0.637510654892, 0.918891249895, 1.0 ],
 			[ 3.97126146325, 1.36552711582, 2.12635406017, 0.479380287255, 1.0 ],
