@@ -321,6 +321,8 @@ class SeasonalTrendLoess:
             if len(data) < 2 * self.fPeriodLength:
                 raise ValueError("SeasonalTrendLoess.Builder: Data series must be at least 2 * periodicity in length")
             if self.fPeriodic:
+                massiveWidth = 100 * len(data)
+                periodicConsistent = self.fSeasonalDegree is not None and self.fSeasonalWidth is not None and self.fSeasonalWidth == massiveWidth and self.fSeasonalDegree == 0
                 if self.fSeasonalWidth is not None and not periodicConsistent:
                     raise NameError("SeasonalTrendLoess.Builder: setSeasonalWidth and setPeriodic cannot both be called.")
                 if self.fSeasonalDegree is not None and not periodicConsistent:
@@ -331,6 +333,8 @@ class SeasonalTrendLoess:
                 if self.fSeasonalWidth is None:
                     raise ValueError("SeasonalTrendLoess.Builder: setSeasonalWidth or setPeriodic must be called.")
             if self.fFlatTrend:
+                massiveWidth = 100 * self.fPeriodLength * len(data)
+                flatTrendConsistent = self.fTrendWidth is not None and self.fTrendDegree is not None and self.fTrendWidth == massiveWidth and self.fTrendDegree == 0
                 if self.fTrendWidth is not None and not flatTrendConsistent:
                     raise NameError("SeasonalTrendLoess.Builder: setTrendWidth incompatible with flat trend.")
                 if self.fTrendDegree is not None and not flatTrendConsistent:
@@ -338,6 +342,8 @@ class SeasonalTrendLoess:
                 if self.fTrendJump is not None:
                     raise ValueError("SeasonalTrendLoess.Builder: setTrendJump incompatible with flat trend.")
             if self.fLinearTrend:
+                massiveWidth = 100 * self.fPeriodLength * len(data)
+                linearTrendConsistent = self.fTrendWidth is not None and self.fTrendDegree is not None and self.fTrendWidth == massiveWidth and self.fTrendDegree == 1
                 if self.fTrendWidth is not None and not linearTrendConsistent:
                     raise NameError("SeasonalTrendLoess.Builder: setTrendWidth incompatible with linear trend.")
                 if self.fTrendDegree is not None and not linearTrendConsistent:
