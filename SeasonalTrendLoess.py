@@ -498,8 +498,7 @@ class SeasonalTrendLoess:
 			# The residual-based weights are a "bisquare" weight based on the residual deviation compared to 6 times the
 			# median absolute deviation (MAD). First compute 6 * MAD. (The sort could be a selection but this is
 			# not critical as the rest of the algorithm is higher complexity.)
-            self.fWeights = np.absolute(self.fData - self.fSeasonal - self.fTrend).sort()
-
+            self.fWeights = np.sort(np.absolute(self.fData - self.fSeasonal - self.fTrend))
             sixMad = 6.0 * np.median(self.fWeights)
             h = self.fWeights / sixMad
             w = 1.0 - h ** 2

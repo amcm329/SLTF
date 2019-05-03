@@ -159,7 +159,7 @@ class LoessInterpolator(object):
                     trix = 1.0 - fraction * fraction * fraction
                     weight = trix * trix * trix
                 #  If external weights are provided, apply them.
-                if self._fExternalWeights != None:
+                if self._fExternalWeights is not None:
                     weight *= self._fExternalWeights[j]
                 totalWeight += weight
             self._fWeights[j] = weight

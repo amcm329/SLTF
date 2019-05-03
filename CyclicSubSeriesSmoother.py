@@ -83,7 +83,7 @@ class CyclicSubSeriesSmoother:
     """
     def smoothSeasonal(self, rawData, smoothedData, weights):
         self.extractRawSubSeriesAndWeights(rawData, weights)
-        self.computeSmoothedSubSeries(weights != None)
+        self.computeSmoothedSubSeries(weights is not None)
         self.reconstructExtendedDataFromSubSeries(smoothedData)
 
 
@@ -106,7 +106,7 @@ class CyclicSubSeriesSmoother:
               #period ++
               for i in range(int(cycleLength)):
                     self._fRawCyclicSubSeries[period][i] = data[i * self._fPeriodLength + period]
-                    if weights != None: 
+                    if weights is not None: 
                        self._fSubSeriesWeights[period][i] = weights[i * self._fPeriodLength + period]
 
 
