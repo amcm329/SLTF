@@ -1,4 +1,7 @@
-import math 
+import math
+import numpy as np
+
+
 class LoessInterpolator(object):
     
     def __init__(self):
@@ -30,7 +33,7 @@ class LoessInterpolator(object):
         def setDegree(self, degree):
             """ generated source for method setDegree """
             if degree < 0 or degree > 2:
-                raise IllegalArgumentException("Degree must be 0, 1 or 2")
+                raise ValueError("Degree must be 0, 1 or 2")
             self._fDegree = degree
             return self
 
@@ -47,9 +50,9 @@ class LoessInterpolator(object):
         def interpolate(self, data):
             """ generated source for method interpolate """
             if self._fWidth is None:
-                raise IllegalStateException("LoessInterpolator.Builder: Width must be set")
+                raise ValueError("LoessInterpolator.Builder: Width must be set")
             if data is None:
-                raise IllegalStateException("LoessInterpolator.Builder: data must be non-null")
+                raise ValueError("LoessInterpolator.Builder: data must be non-null")
             if self._fDegree == 0:
                 return FlatLoessInterpolator(self._fWidth, data, self._fExternalWeights)
             elif self._fDegree == 1:
@@ -190,7 +193,7 @@ class LoessInterpolator(object):
         self._fWidth = width
         self._fData = data
         self._fExternalWeights = externalWeights
-        self._fWeights = [[]]*len(self._fData)
+        self._fWeights = np.zeros(len(self._fData))
 
 
 class FlatLoessInterpolator(LoessInterpolator):
@@ -297,7 +300,7 @@ class QuadraticLoessInterpolator(LoessInterpolator):
         x4Mean = 0.0
         i = left
         while i <= right:
-            w = _fWeights[i]
+            w = self._fWeights[i]
             x1w = i * w
             x2w = i * x1w
             x3w = i * x2w
