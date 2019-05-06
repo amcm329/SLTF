@@ -83,7 +83,7 @@ class LoessInterpolator(object):
         state = self.computeNeighborhoodWeights(x, left, right)
         if state == self.State()._WEIGHTS_FAILED:
             return None
-        if state == self.State()	._LINEAR_OK:
+        if state == self.State()._LINEAR_OK:
             self.updateWeights(x, left, right)
         ys = 0.0
         i = left
