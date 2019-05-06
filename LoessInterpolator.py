@@ -257,8 +257,9 @@ class LinearLoessInterpolator(LoessInterpolator):
         #  Note that this is only done if the points are spread out enough (variance > (0.001 * range)^2)
         #  to compute a slope. If not, we leave the weights alone and essentially fall back to a moving
         #  average of the data based on the neighborhood and external weights.
-        range = len(self._fData)
+        range = len(self._fData) - 1
         if x2Mean > 0.000001 * range * range:
+            beta = (x -xMean) / x2Mean
             while i <= right:
                 self._fWeights[i] *= (1.0 + beta * (i - xMean))
                 i += 1
@@ -290,10 +291,10 @@ class QuadraticLoessInterpolator(LoessInterpolator):
     #    
     def updateWeights(self, x, left, right):
         """ generated source for method updateWeights """
-        self._x1Mean = 0.0
-        self._x2Mean = 0.0
-        self._x3Mean = 0.0
-        self._x4Mean = 0.0
+        x1Mean = 0.0
+        x2Mean = 0.0
+        x3Mean = 0.0
+        x4Mean = 0.0
         i = left
         while i <= right:
             w = _fWeights[i]
@@ -308,9 +309,9 @@ class QuadraticLoessInterpolator(LoessInterpolator):
             x4Mean += x4w;
             i += 1
 
-        m2 = _x2Mean - _x1Mean * _x1Mean
-        m3 = _x3Mean - _x2Mean * _x1Mean
-        m4 = _x4Mean - _x2Mean * _x2Mean
+        m2 = x2Mean - x1Mean * x1Mean
+        m3 = x3Mean - x2Mean * x1Mean
+        m4 = x4Mean - x2Mean * x2Mean
 
         denominator = m2 * m4 - m3 * m3
         range = len(self._fData)
@@ -331,7 +332,7 @@ class QuadraticLoessInterpolator(LoessInterpolator):
 
             i = left
             while i <= right:
-                self._fWeights[i] *= (1 + a1 * (i - _x1Mean) + a2 * (i * i - _x2Mean))
+                self._fWeights[i] *= (1 + a1 * (i - x1Mean) + a2 * (i * i - x2Mean))
                 i += 1
 
 #LoessInterpolator #      * class LoessInterpolator.Builder - Factory for LoessInterpolator objects
