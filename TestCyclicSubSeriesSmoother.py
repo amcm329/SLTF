@@ -3,7 +3,7 @@ import math
 import unittest
 import numpy as np
 
-class CyclicSubSeriesSmootherTest:
+class CyclicSubSeriesSmootherTest(unittest.TestCase):
 
       #Smoothing the cyclic sub-series extends the data one period in each direction. Ensure that when the data is 
       #linear, that the extrapolations are linear.
