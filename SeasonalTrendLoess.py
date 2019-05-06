@@ -537,7 +537,7 @@ class SeasonalTrendLoess:
 			# Restore the end-point values as the smoother will tend to over-modify these.
             self.fSeasonal[1:-1] = smoothedSeasonal[1:-1]
 
-            fResiduals = fData - fTrend - fSeasonal
+            self.fResiduals = self.fData - self.fTrend - self.fSeasonal
 
     def decompose(self):
         # TODO: Pass input data to decompose and reallocate buffers based on that size.
@@ -619,6 +619,7 @@ class SeasonalTrendLoess:
 
         for i in range(len(data)):
             seasonal[i] = self.fExtendedSeasonal[self.fPeriodLength + i] - self.fDeSeasonalized[i]
+
         trend = data - seasonal
 
         residualWeights = weights if useResidualWeights else None
