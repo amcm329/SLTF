@@ -29,7 +29,6 @@ class LoessInterpolator(object):
             return self
 
        
-       
         def setDegree(self, degree):
             """ generated source for method setDegree """
             if degree < 0 or degree > 2:
@@ -38,14 +37,11 @@ class LoessInterpolator(object):
             return self
 
 
-       
         def setExternalWeights(self, weights):
             """ generated source for method setExternalWeights """
             self._fExternalWeights = weights
             return self
 
-
-       
  
         def interpolate(self, data):
             """ generated source for method interpolate """
@@ -89,10 +85,8 @@ class LoessInterpolator(object):
         if state == self.State()._LINEAR_OK:
             self.updateWeights(x, left, right)
         ys = 0.0
-        i = left
-        while i <= right:
+        for i in range(left, right+1):
             ys += self._fWeights[i] * self._fData[i]
-            i += 1
         return ys
 
     # 
@@ -149,8 +143,7 @@ class LoessInterpolator(object):
         l001 = 0.001 * lambda_
         #  Compute neighborhood weights, updating with external weights if supplied.
         totalWeight = 0.0
-        j = left
-        while j <= right:
+        for j in range(left, right+1):
             #  Compute the tri-cube neighborhood weight
             delta = abs(x -j)
             weight = 0.0
@@ -159,22 +152,22 @@ class LoessInterpolator(object):
                     weight = 1.0
                 else:
                     fraction = delta / lambda_
-                    trix = 1.0 - fraction * fraction * fraction
-                    weight = trix * trix * trix
+                    trix = 1.0 - fraction ** 3
+                    weight = trix ** 3
                 #  If external weights are provided, apply them.
                 if self._fExternalWeights is not None:
                     weight *= self._fExternalWeights[j]
                 totalWeight += weight
             self._fWeights[j] = weight
-            j += 1
+
         #  If the total weight is 0, we can't proceed, so signal failure.
         if totalWeight <= 0.0:
             return self.State()._WEIGHTS_FAILED
         #  Normalize the weights
-        j = left
-        while j <= right:
+
+        for j in range(left, right+1):
             self._fWeights[j] /= totalWeight
-            j += 1
+
         return self.State()._LINEAR_OK if (lambda_ > 0) else self.State()._LINEAR_FAILED
 
     # 
@@ -245,17 +238,13 @@ class LinearLoessInterpolator(LoessInterpolator):
         """ generated source for method updateWeights """
         xMean = 0.0
 
-        i = left
-        while i <= right:
+        for i in range(left, right+1):
             xMean += i * self._fWeights[i]
-            i += 1
 
         x2Mean = 0.0
-        i = left
-        while i <= right:
+        for i in range(left, right+1):
         	delta = i - xMean
         	x2Mean += self._fWeights[i] * delta * delta
-        	i += 1
         #  Finding y(x) from the least-squares fit can be cast as a linear operation on the input data.
         #  This is implemented by updating the weights to include the least-squares weighting of the points.
         #  Note that this is only done if the points are spread out enough (variance > (0.001 * range)^2)
@@ -264,10 +253,8 @@ class LinearLoessInterpolator(LoessInterpolator):
         _range = len(self._fData) - 1
         if x2Mean > 0.000001 * _range * _range:
             beta = (x -xMean) / x2Mean
-            i = left
-            while i <= right:
+            for i in range(left, right+1):
                 self._fWeights[i] *= (1.0 + beta * (i - xMean))
-                i += 1
 
 
 class QuadraticLoessInterpolator(LoessInterpolator):
@@ -300,8 +287,7 @@ class QuadraticLoessInterpolator(LoessInterpolator):
         x2Mean = 0.0
         x3Mean = 0.0
         x4Mean = 0.0
-        i = left
-        while i <= right:
+        for i in range(left, right+1):
             w = self._fWeights[i]
             x1w = i * w
             x2w = i * x1w
@@ -312,7 +298,6 @@ class QuadraticLoessInterpolator(LoessInterpolator):
             x2Mean += x2w;
             x3Mean += x3w;
             x4Mean += x4w;
-            i += 1
 
         m2 = x2Mean - x1Mean * x1Mean
         m3 = x3Mean - x2Mean * x1Mean
@@ -334,11 +319,8 @@ class QuadraticLoessInterpolator(LoessInterpolator):
             a1 = beta2 * x1 - beta3 * x2
             a2 = beta4 * x2 - beta3 * x1
 
-
-            i = left
-            while i <= right:
+            for i in range(left, right+1):
                 self._fWeights[i] *= (1 + a1 * (i - x1Mean) + a2 * (i * i - x2Mean))
-                i += 1
 
 #LoessInterpolator #      * class LoessInterpolator.Builder - Factory for LoessInterpolator objects
 

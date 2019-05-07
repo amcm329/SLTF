@@ -9,72 +9,57 @@ class LoessInterpolatorTest(unittest.TestCase):
     def test_constantDataGivesConstantValuesAtNodes(self):
         """ generated source for method constantDataGivesConstantValuesAtNodes """
         data = self.createConstantDataArray()
-        degree = 0
-        while degree < 3:
+        for degree in range(3):
             loess = LoessInterpolator.Builder().setWidth(7).setDegree(degree).interpolate(data)
-            self.test_checkFitToData(data, loess, 2.0e-11)
-            degree += 1
+            self.checkFitToData(data, loess, 2.0e-11)
 
     def test_constantDataExtrapolatesConstantValues(self):
         """ generated source for method constantDataExtrapolatesConstantValues """
         data = self.createConstantDataArray()
-        degree = 0
-        while degree < 3:
+        for degree in range(3):
             loess = LoessInterpolator.Builder().setWidth(7).setDegree(degree).interpolate(data)
             y = loess.smoothOnePoint(-100.0, 0, len(data)-1)
             self.assertIsNotNone(y)
             self.assertAlmostEqual(data[0], y, msg="Bad value extrapolating left", delta=3.0e-9)
             y = loess.smoothOnePoint(1000.0, 0, len(data)-1)
             self.assertIsNotNone(y)
-            self.assertAlmostEqual(data[0], y, msg="Bad value extrapolating right", delta=3.0e-9)
-            degree += 1
+            self.assertAlmostEqual(data[0], y, msg="Bad value extrapolating right", delta=3.0e-7)
 
     def test_constantDataGivesConstantInterpolatedResults(self):
         """ generated source for method constantDataGivesConstantInterpolatedResults """
         data = self.createConstantDataArray()
-        degree = 0
-        while degree < 3:
+        for degree in range(3):
             loess = LoessInterpolator.Builder().setWidth(7).setDegree(degree).interpolate(data)
-            i = 0
-            while i < 99:
+            for i in range(99):
                 x = i + 0.5
                 y = loess.smoothOnePoint(x, 0, len(data)-1)
                 self.assertIsNotNone(y)
                 self.assertAlmostEqual(data[i], y, msg="Bad value at {}".format(i), delta=2.0e-11)
-                i += 1
-            degree += 1
 
     def test_linearDataReturnsDataOnLine(self):
         """ generated source for method linearDataReturnsDataOnLine """
         data = self.createLinearDataArray()
         loess = LoessInterpolator.Builder().setWidth(5).interpolate(data)
-        i = 0
-        while len(data):
+        for i in range(len(data)):
             y = loess.smoothOnePoint(i, max(0, i - 2), min(i + 2, len(data) - 1))
             self.assertIsNotNone(y)
             self.assertAlmostEqual(data[i], y, msg="Bad value at {}".format(i), delta=1.0e-8)
-            i += 1
 
     def test_linearDataReturnsDataOnLine2(self):
         """ generated source for method linearDataReturnsDataOnLine2 """
         data = self.createLinearDataArray()
         builder = LoessInterpolator.Builder()
-        degree = 1
-        while degree < 3:
-            loess = builder.setWidth(5000).setDegree(degree).interpolate(data);
-            self.test_checkFitToData(data, loess, 1.0e-12)
-            degree += 1
+        for degree in range(1, 3):
+            loess = builder.setWidth(5000).setDegree(degree).interpolate(data)
+            self.checkFitToData(data, loess, 1.0e-12)
 
     def test_linearDataExtrapolatesLinearValues(self):
         """ generated source for method linearDataExtrapolatesLinearValues """
         data = np.zeros(100)
-        i = 0
-        while i<len(data):
+        for i in range(len(data)):
             data[i] = -0.25 * i
-            i += 1
         builder = LoessInterpolator.Builder()
-        degree = 1
-        while degree < 3:
+        for degree in range(1, 3):
             loess = builder.setWidth(7).setDegree(degree).interpolate(data)
             y = loess.smoothOnePoint(-100, 0, len(data)-1)
             self.assertIsNotNone(y)
@@ -82,7 +67,6 @@ class LoessInterpolatorTest(unittest.TestCase):
             y = loess.smoothOnePoint(1000.0, 0, len(data)-1)
             self.assertIsNotNone(y)
             self.assertAlmostEqual(-0.25 * 1000, y, msg="Bad value extrapolating right", delta=1.0e-8)
-            degree += 1
 
     def test_smoothingWithLargeWidthGivesLinearRegressionFit(self):
         """ generated source for method smoothingWithLargeWidthGivesLinearRegressionFit """
@@ -118,11 +102,10 @@ class LoessInterpolatorTest(unittest.TestCase):
         data = self.createQuadraticDataArray()
         loess = LoessInterpolator.Builder().setWidth(500000).setDegree(2).interpolate(data)
         i = -100
-        while i < len(data):
+        for i in range(-100, len(data)):
             y = loess.smoothOnePoint(i, 0, len(data)-1)
             self.assertIsNotNone(y)
             self.assertAlmostEqual(3.7 - 0.25 * i + 0.7 * i * i, y, msg="Bad value at {}".format(i), delta=1.0e-10)
-            i += 1
 
     def test_quadraticSmoothingWithLargeWidthGivesQuadraticFit(self):
         """ generated source for method quadraticSmoothingWithLargeWidthGivesQuadraticFit """
@@ -142,14 +125,11 @@ class LoessInterpolatorTest(unittest.TestCase):
         23.800117109909, 52.816749904647, 33.332347686135, 28.2914005902, 14.683404049683, 53.212854193497, 1.829566520138, 
         18.404833513506, -9.019769796879, 9.006983482915]
         loess = LoessInterpolator.Builder().setWidth(500000).setDegree(2).interpolate(data)
-        i = 0
-        while len(data):
+        for i in range(len(data)):
             y = loess.smoothOnePoint(i, 0, len(data)-1)
             self.assertIsNotNone(y)
             y0 = -0.042576513162 * i * i + 4.318963328925 * i - 9.80856523083
             self.assertAlmostEqual(y0, y, msg="Bad value at {}".format(i), delta=1.0e-8)
-            i += 1
-
     
     def test_degreeCheck1(self):
         """ generated source for method degreeCheck1 """
@@ -174,40 +154,32 @@ class LoessInterpolatorTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             LoessInterpolator.Builder().setWidth(17).interpolate(None)
 
-    def test_checkFitToData(self, data, loess, eps):
+    def checkFitToData(self, data, loess, eps):
         """ generated source for method checkFitToData """
-        i = 0
-        while i<len(data):
+        for i in range(len(data)):
             y = loess.smoothOnePoint(i, 0, len(data)-1)
             self.assertIsNotNone(y)
             self.assertAlmostEqual(data[i], y, msg="Bad value at {}".format(i), delta=eps)
-            i += 1
 
     def createConstantDataArray(self):
         """ generated source for method createConstantDataArray """
         data = np.empty(100)
-        i = 0
-        while i < 100:
+        for i in range(100):
             data[i] = 2016.0
-            i += 1
         return data
 
     def createLinearDataArray(self):
         """ generated source for method createLinearDataArray """
         data = np.empty(100)
-        i = 0
-        while i<len(data):
+        for i in range(len(data)):
             data[i] = 3.7 - 0.25 * i
-            i += 1
         return data
 
     def createQuadraticDataArray(self):
         """ generated source for method createQuadraticDataArray """
         data = np.empty(100)
-        i = 0
-        while i<len(data):
+        for i in range(len(data)):
             data[i] = 3.7 - 0.25 * i + 0.7 * i * i
-            i += 1
         return data
 
 if __name__ == '__main__':
