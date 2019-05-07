@@ -37,7 +37,7 @@ class CyclicSubSeriesSmootherTest(unittest.TestCase):
           extendedData = np.empty(6 * period)
           builder = CyclicSubSeriesSmoother.Builder()
           builder = builder.setWidth(7) #Sub-cycle data is linear so width shouldn't matter
-          builder = builder.setNumPeriodsForward(4).setNumPeriodsBackward(0)
+          builder = builder.extrapolateForwardOnly(4)
           sssmoother = builder.setDataLength(len(data)).setPeriodicity(period).build()
 
           sssmoother.smoothSeasonal(data, extendedData, None)
