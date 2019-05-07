@@ -98,7 +98,7 @@ class SeasonalTrendLoessTest(unittest.TestCase):
         builder.setInnerIterations(2).setRobustnessIterations(0)
         smoother = builder.buildSmoother(data)
         stl = smoother.decompose()
-        epsilon = 0.0
+        epsilon = 1.0e-10
         seasonal = stl.getSeasonal()
         for i in range(12):
             for p in range(12):

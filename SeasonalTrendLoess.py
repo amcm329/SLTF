@@ -626,7 +626,7 @@ class SeasonalTrendLoess:
 
         trendSmoother = self.fLoessSmootherFactory.setData(trend).setExternalWeights(residualWeights).build()
 
-        trend = trendSmoother.smooth()
+        self.fDecomposition.fTrend = trendSmoother.smooth()
 
     def __str__(self):
         return ("SeasonalTrendLoess: [\n" +

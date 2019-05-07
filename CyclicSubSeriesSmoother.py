@@ -70,6 +70,7 @@ class CyclicSubSeriesSmoother:
             #Lo mismo, hacer esa verificacion aqui para poder hacer la "matriz" que se pide en Java 
             self._fRawCyclicSubSeries[period] = np.zeros(int(seriesLength))
             self._fSmoothedCyclicSubSeries[period] = np.empty(int(self._fNumPeriodsToExtrapolateBackward + seriesLength + self._fNumPeriodsToExtrapolateForward))
+
             self._fSubSeriesWeights[period] = np.empty(seriesLength)
 			  
 			  
