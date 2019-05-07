@@ -18,7 +18,21 @@ class LoessSmootherTest(unittest.TestCase):
         # 
         #  x = np.arange(0, 100)
         #  y = 10.0 * x + 100.0*np.random.randn(100)
-        scatter100 = [45.0641826945, 69.6998783993, 9.81903951235, -75.4079441854, 53.7430205615, 12.1359388898, 84.972441255, 194.467452805, 182.276035711, 128.161856616, 147.021732433, -40.6773185264, 41.1575417261, 111.04115761, 75.0179056538, 278.946359666, 93.3453251262, 103.779785975, 252.750915429, 252.636103208, 457.859165335, 143.021758047, 79.343240193, 280.969547174, 35.650257308, 157.656673765, 29.6984404613, 141.980264706, 263.465758806, 346.309482972, 330.044915761, 135.019120067, 211.801092316, 198.186646037, 206.088498967, 510.89412974, 332.076915483, 530.524264511, 298.21175481, 234.317252809, 573.836352739, 382.708235416, 340.090947574, 452.475239395, 576.134135134, 536.703405146, 545.033194307, 479.525083559, 368.551750848, 588.429801268, 528.672000843, 507.301073925, 432.749370682, 600.239380863, 567.328853536, 481.544306962, 510.42118889, 456.519971302, 565.839651322, 510.505759788, 503.2514057, 491.279917041, 642.319449309, 573.019058995, 574.709858012, 597.316826688, 602.361341448, 622.312708681, 506.669245531, 640.120714982, 699.793133288, 672.969830555, 656.645808774, 901.375994679, 573.903581507, 906.472771298, 719.604429516, 759.262994619, 786.970584025, 717.422383977, 899.007418786, 745.516032607, 748.049043698, 876.99080793, 810.985707949, 888.762045358, 947.030030816, 1007.48402395, 830.251382179, 921.078927761, 810.212273661, 926.740829016, 787.965498372, 944.230542154, 808.215987256, 1044.74526488, 866.568085766, 1068.6479395, 776.566771785, 1190.32090194]
+        scatter100 = [45.0641826945, 69.6998783993, 9.81903951235, -75.4079441854, 53.7430205615, 12.1359388898, 
+        84.972441255, 194.467452805, 182.276035711, 128.161856616, 147.021732433, -40.6773185264, 41.1575417261, 
+        111.04115761, 75.0179056538, 278.946359666, 93.3453251262, 103.779785975, 252.750915429, 252.636103208, 
+        457.859165335, 143.021758047, 79.343240193, 280.969547174, 35.650257308, 157.656673765, 29.6984404613, 
+        141.980264706, 263.465758806, 346.309482972, 330.044915761, 135.019120067, 211.801092316, 198.186646037, 
+        206.088498967, 510.89412974, 332.076915483, 530.524264511, 298.21175481, 234.317252809, 573.836352739, 
+        382.708235416, 340.090947574, 452.475239395, 576.134135134, 536.703405146, 545.033194307, 479.525083559, 
+        368.551750848, 588.429801268, 528.672000843, 507.301073925, 432.749370682, 600.239380863, 567.328853536, 
+        481.544306962, 510.42118889, 456.519971302, 565.839651322, 510.505759788, 503.2514057, 491.279917041, 
+        642.319449309, 573.019058995, 574.709858012, 597.316826688, 602.361341448, 622.312708681, 506.669245531, 
+        640.120714982, 699.793133288, 672.969830555, 656.645808774, 901.375994679, 573.903581507, 906.472771298, 
+        719.604429516, 759.262994619, 786.970584025, 717.422383977, 899.007418786, 745.516032607, 748.049043698, 
+        876.99080793, 810.985707949, 888.762045358, 947.030030816, 1007.48402395, 830.251382179, 921.078927761, 
+        810.212273661, 926.740829016, 787.965498372, 944.230542154, 808.215987256, 1044.74526488, 866.568085766, 
+        1068.6479395, 776.566771785, 1190.32090194]
         #  Fit to this data from Python with
         #  from scipy.stats import linregress
         #  slope, intercept, r, p, stderr = linregress(x, y)
@@ -26,77 +40,73 @@ class LoessSmootherTest(unittest.TestCase):
         testIntercept = -12.894457726954045
         #  Choose a loess width sufficiently large that tri-cube weights for all of the data will be 1.0.
         builder = LoessSmoother.Builder().setWidth(1000000).setData(scatter100)
-        j = 1
-        while j < len(scatter100):
+
+        for j in range(1, len(scatter100)-1):
             loess = builder.setJump(j).build();
             smoothedPoints = loess.smooth();
-            while i < len(smoothedPoints):
+            for i in range(len(smoothedPoints)):
                 y = testSlope * i + testIntercept
-                self.assertEquals("Smoothed points lie on regression line", y, smoothedPoints[i], 1.0e-8)
-                i += 1
-            j += 1
+                self.assertAlmostEqual(y, smoothedPoints[i], msg="Smoothed points lie on regression line", delta=1.0e-8)
 
         #(scatter100)
 
     def test_smoothedNoisySinusoid(self):
         """ generated source for method smoothedNoisySinusoid """
-        width = len(noisySinusoid)
-        loess = LoessSmoother.Builder().setWidth(width).setData(noisySinusoid).build()
+        width = int(len(self.noisySinusoid) / 3)
+        loess = LoessSmoother.Builder().setWidth(width).setData(self.noisySinusoid).build()
         y = loess.smooth()
-        i = 0
-        while i < len(y):
-            self.assertEquals("Smoothed points match test values", self.smoothedNoisySinusoid[i], y[i], 1.0e-8)
-            i += 1
+        for i in range(len(y)):
+            self.assertAlmostEqual(self.smoothedNoisySinusoid[i], y[i], msg="Smoothed points match test values", delta=1.0e-8)
 
     def test_smoothedNoisySinusoidQuadratic(self):
         """ generated source for method smoothedNoisySinusoidQuadratic """
-        width = len(noisySinusoid)
-        loess = LoessSmoother.Builder().setWidth(width).setDegree(2).setData(noisySinusoid).build()
+        width = int(len(self.noisySinusoid) / 3)
+        loess = LoessSmoother.Builder().setWidth(width).setDegree(2).setData(self.noisySinusoid).build()
         y = loess.smooth()
-        i = 0
-        while i < len(y):
-            self.assertEquals("Smoothed points match test values", self.smoothedNoisySinusoidQuadratic[i], y[i], 1.0e-8)
-            i += 1
+        for i in range(len(y)):
+            self.assertAlmostEqual(self.smoothedNoisySinusoidQuadratic[i], y[i], msg="Smoothed points match test values", delta=1.0e-8)
 
     def test_smoothedNoisySinusoidWithShortJump(self):
         """ generated source for method smoothedNoisySinusoidWithShortJump """
-        width = (len(noisySinusoid) /3)
-        loess = LoessSmoother.Builder().setWidth(width).setJump(2).setData(noisySinusoid).build()
+        width = int(len(self.noisySinusoid) / 3)
+        loess = LoessSmoother.Builder().setWidth(width).setJump(2).setData(self.noisySinusoid).build()
         y = loess.smooth()
-        i = 0
-        while i < len(y):
-            self.assertEquals("Smoothed points match test values", self.smoothedNoisySinusoid[i], y[i], 5.0e-3)
-            i += 1
+        for i in range(len(y)):
+            self.assertAlmostEqual(self.smoothedNoisySinusoid[i], y[i], msg="Smoothed points match test values", delta=5.0e-3)
 
     def test_smoothingSinglePointReturnsThatPoint(self):
         """ generated source for method smoothingSinglePointReturnsThatPoint """
         data = [math.pi]
         loess = LoessSmoother.Builder().setWidth(3).setData(data).build()
         smoothed = loess.smooth()
-        self.assertEquals(1, len(smoothed) )
-        self.assertEquals(math.pi, smoothed[0], abs(math.pi))
+        self.assertEqual(1, len(smoothed))
+        self.assertEqual(math.pi, smoothed[0], abs(math.pi))
 
     #@Test(expected=IllegalArgumentException.__class__)
     def test_degreeMustBePositive(self):
         """ generated source for method degreeMustBePositive """
-        LoessSmoother.Builder().setDegree(0)
+        with self.assertRaises(ValueError):
+            LoessSmoother.Builder().setDegree(-1)
 
     #@Test(expected=IllegalArgumentException.__class__)
     def test_degreeMustBeLessThanThree(self):
         """ generated source for method degreeMustBeLessThanThree """
-        LoessSmoother.Builder().setDegree(0)
+        with self.assertRaises(ValueError):
+            LoessSmoother.Builder().setDegree(3)
 
     #@Test(expected=IllegalStateException.__class__)
     def test_widthMustBeSet(self):
         """ generated source for method widthMustBeSet """
-        LoessSmoother.Builder().setData(1000).build()
+        with self.assertRaises(ValueError):
+            LoessSmoother.Builder().setData(1000).build()
 
     #@Test(expected=IllegalStateException.__class__)
     def test_dataMustBeSet(self):
         """ generated source for method dataMustBeSet """
-        LoessSmoother.Builder().setWidth(17).build()
+        with self.assertRaises(ValueError):
+            LoessSmoother.Builder().setWidth(17).build()
 
-noisySinusoid = [0.615658846367, 0.081436552904, 0.230303730527, 0.959995931373,
+    noisySinusoid = [0.615658846367, 0.081436552904, 0.230303730527, 0.959995931373,
             1.54375678078, 1.87862243581, -1.44775062759, 0.410557020262, -0.400078195349, -1.74843720234,
             -1.7693467618, -1.24065458102, -0.225061846055, -0.0590105622047, 0.729386767124, -0.774436105443,
             -0.847411516494, 0.146609588368, 0.0522003450766, -1.16000113745, -0.195452879962, 0.373004911483,
@@ -201,8 +211,7 @@ noisySinusoid = [0.615658846367, 0.081436552904, 0.230303730527, 0.959995931373,
             -0.962021714226, -0.707237404345, -0.483476616575, -1.38451677995, 0.937329482485, 1.50071896955]
 
 
-
-smoothedNoisySinusoid = [-0.115429049556, -0.105616162671, -0.0958103965772,
+    smoothedNoisySinusoid = [-0.115429049556, -0.105616162671, -0.0958103965772,
             -0.0860120073923, -0.0762213010924, -0.0664386979789, -0.0566647922731, -0.0469003269604, -0.0371459975443,
             -0.0274025077379, -0.0176705218258, -0.00795055684518, 0.00175703450471, 0.0114520132461, 0.0211341761,
             0.0308033158139, 0.0404591921319, 0.0501016189488, 0.0597304790645, 0.0693456645273, 0.0789470868501,
@@ -308,7 +317,7 @@ smoothedNoisySinusoid = [-0.115429049556, -0.105616162671, -0.0958103965772,
             -0.00764116700108, 0.000267694225521, 0.00817089676402, 0.0160686218156, 0.0239611423745 ]
 
 
-smoothedNoisySinusoidQuadratic = [ -0.229846507835381, -0.215965189399665,
+    smoothedNoisySinusoidQuadratic = [ -0.229846507835381, -0.215965189399665,
             -0.202125640935767, -0.188328400632176, -0.174574104168342, -0.160863590740425, -0.147197987322796,
             -0.133578638287119, -0.120006755712345, -0.106483512670333, -0.093009967405829, -0.0795869035127199,
             -0.066214821874617, -0.0528940319693551, -0.039624772866716, -0.0264072698495869, -0.0132417714780268,
