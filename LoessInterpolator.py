@@ -249,6 +249,7 @@ class LinearLoessInterpolator(LoessInterpolator):
         while i <= right:
             xMean += i * self._fWeights[i]
             i += 1
+
         x2Mean = 0.0
         i = left
         while i <= right:
@@ -260,9 +261,10 @@ class LinearLoessInterpolator(LoessInterpolator):
         #  Note that this is only done if the points are spread out enough (variance > (0.001 * range)^2)
         #  to compute a slope. If not, we leave the weights alone and essentially fall back to a moving
         #  average of the data based on the neighborhood and external weights.
-        range = len(self._fData) - 1
-        if x2Mean > 0.000001 * range * range:
+        _range = len(self._fData) - 1
+        if x2Mean > 0.000001 * _range * _range:
             beta = (x -xMean) / x2Mean
+            i = left
             while i <= right:
                 self._fWeights[i] *= (1.0 + beta * (i - xMean))
                 i += 1
@@ -317,9 +319,9 @@ class QuadraticLoessInterpolator(LoessInterpolator):
         m4 = x4Mean - x2Mean * x2Mean
 
         denominator = m2 * m4 - m3 * m3
-        range = len(self._fData)
+        _range = len(self._fData) - 1
 
-        if denominator > 0.000001 * range * range:
+        if denominator > 0.000001 * _range * _range:
             #  TODO: Are there cases where denominator is too small but m2 is not too small?
             #  In that case, it would make sense to fall back to linear regression instead of falling back to just the
             #  weighted average.
