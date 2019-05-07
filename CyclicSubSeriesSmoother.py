@@ -65,12 +65,12 @@ class CyclicSubSeriesSmoother:
         for period in range(periodicity):
             #importante con el ++period
 
-            seriesLength = self._fNumPeriods + 1 if period < self._fRemainder else self._fNumPeriods
+            seriesLength = int(self._fNumPeriods + 1 if period < self._fRemainder else self._fNumPeriods)
 
             #Lo mismo, hacer esa verificacion aqui para poder hacer la "matriz" que se pide en Java 
             self._fRawCyclicSubSeries[period] = np.zeros(int(seriesLength))
-            self._fSmoothedCyclicSubSeries[period] = np.empty(int(self._fNumPeriodsToExtrapolateBackward + seriesLength +     self._fNumPeriodsToExtrapolateForward))
-            self._fSubSeriesWeights[period] = np.empty(int(seriesLength))
+            self._fSmoothedCyclicSubSeries[period] = np.empty(int(self._fNumPeriodsToExtrapolateBackward + seriesLength + self._fNumPeriodsToExtrapolateForward))
+            self._fSubSeriesWeights[period] = np.empty(seriesLength)
 			  
 			  
     """
@@ -310,7 +310,7 @@ class CyclicSubSeriesSmoother:
                                            self._fJump, 
                                            self._fDataLength, 
                                            self._fPeriodicity,
-					   self._fNumPeriodsBackward, 
+					                       self._fNumPeriodsBackward, 
                                            self._fNumPeriodsForward
                                            )
 		

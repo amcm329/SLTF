@@ -23,13 +23,13 @@ class CyclicSubSeriesSmootherTest(unittest.TestCase):
           for i in range(len(extendedData)):
               amplitude = int(11 - i / period) #An extra for the extrapolation before.
               value = float(amplitude * math.sin(i * dx))
-              self.assertAlmostEqual(value, extendedData[i],  msg="test point {0}".format(i), delta=1.0e-11)
+              self.assertAlmostEqual(value, extendedData[i],  msg="test point {}".format(i), delta=1.0e-11)
 
 
       def test_shouldExtrapolateFourPeriodsForwards(self):
           period = 24
           data = np.empty(2 * period) 
-          dx = 2 * math.pi / period
+          dx = float(2 * math.pi / period)
           for i in range(len(data)):
               amplitude = int(10 - i / period)
               data[i] = float(amplitude * math.sin(i * dx))
@@ -37,15 +37,15 @@ class CyclicSubSeriesSmootherTest(unittest.TestCase):
           extendedData = np.empty(6 * period)
           builder = CyclicSubSeriesSmoother.Builder()
           builder = builder.setWidth(7) #Sub-cycle data is linear so width shouldn't matter
-          builder = builder.extrapolateForwardOnly(4)
-          sssmoother = builder.setDataLength(len(data)).setPeriodicity(period).build();
+          builder = builder.setNumPeriodsForward(4).setNumPeriodsBackward(0)
+          sssmoother = builder.setDataLength(len(data)).setPeriodicity(period).build()
 
-          sssmoother.smoothSeasonal(data, extendedData, None);
+          sssmoother.smoothSeasonal(data, extendedData, None)
 
           for i in range(len(extendedData)):
               amplitude = int(10 - i / period)
               value = float(amplitude * math.sin(i * dx))
-              self.assertAlmostEqual(value, extendedData[i], msg="test point {0}".format(i), delta=1.0e-11)
+              self.assertAlmostEqual(value, extendedData[i], msg="test point {}".format(i), delta=1.0e-11)
 
 
       def test_shouldExtrapolateTwoPeriodsBackwardAndTwoPeriodsForward(self):
@@ -69,7 +69,7 @@ class CyclicSubSeriesSmootherTest(unittest.TestCase):
           for i in range(len(extendedData)):
               amplitude = int(12 - i / period) #Two extra for the extrapolation before.
               value = float(amplitude * math.sin(i * dx))
-              self.assertAlmostEqual(value, extendedData[i], msg="test point {0}".format(i), delta=1.0e-11)
+              self.assertAlmostEqual(value, extendedData[i], msg="test point {}".format(i), delta=1.0e-11)
 
 
       def test_degreeMustBePositive(self):
