@@ -151,8 +151,8 @@ class CyclicSubSeriesSmoother:
         interpolator = smoother.getInterpolator()
 
         #Extrapolate from the leftmost "width" points to the "-1" position
-        left = 0;
-        right = left + self._fWidth - 1;
+        left = 0
+        right = left + self._fWidth - 1
         right = min(right, cycleLength - 1)
         leftValue = self._fNumPeriodsToExtrapolateBackward
 
@@ -162,15 +162,16 @@ class CyclicSubSeriesSmoother:
             smoothedData[leftValue - i] = smoothedData[leftValue] if ys == None else ys
 
             #Extrapolate from the rightmost "width" points to the "length" position (one past the array end).
-            right = cycleLength - 1
-            left = right - self._fWidth + 1
-            left = max(0, left)
-            rightValue = self._fNumPeriodsToExtrapolateBackward + right
+        right = cycleLength - 1
+        left = right - self._fWidth + 1
+        left = max(0, left)
+        rightValue = self._fNumPeriodsToExtrapolateBackward + right
 
             #es menor e igual
-            for i in range(1,self._fNumPeriodsToExtrapolateForward + 1):
-                ys = interpolator.smoothOnePoint(right + i, left, right)
-                smoothedData[rightValue + i] = smoothedData[rightValue] if ys == None else ys
+        for i in range(1,self._fNumPeriodsToExtrapolateForward + 1):
+            ys = interpolator.smoothOnePoint(right + i, left, right)
+            smoothedData[rightValue + i] = smoothedData[rightValue] if ys == None else ys
+            #print('{}, {}, {}'.format(left,right,self._fNumPeriodsToExtrapolateForward,rightValue))
 				
 
     """
@@ -184,8 +185,8 @@ class CyclicSubSeriesSmoother:
             self._fPeriodicity = None
             self._fNumPeriodsBackward = None
             self._fNumPeriodsForward = None
-            self._fDegree = 1;
-            self._fJump = 1;
+            self._fDegree = 1
+            self._fJump = 1
 
         """
          Set the width of the LOESS smoother used to smooth each seasonal sub-series.
