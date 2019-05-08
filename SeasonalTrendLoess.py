@@ -506,9 +506,20 @@ class SeasonalTrendLoess:
 			# not critical as the rest of the algorithm is higher complexity.)
             self.fWeights = np.sort(np.absolute(self.fData - self.fSeasonal - self.fTrend))
             sixMad = 6.0 * np.median(self.fWeights)
-            h = self.fWeights / sixMad
-            w = 1.0 - h ** 2
-            self.fWeights = w ** 2
+            c999 = 0.999 * sixMad
+            c001 = 0.001 * sixMad
+
+            for i in range(len(self.fData)):
+                r = abs(self.fData[i] - self.fSeasonal[i] - self.fTrend[i])
+                if r <= c001:
+                    self.fWeights[i] = 1.0
+                elif r <= c999:
+                    h = r / sixMad
+                    w = 1.0 - h ** 2
+                    self.fWeights[i] = w ** 2
+                else:
+                    self.fWeights[i] = 0.0
+                    
 
         def smoothSeasonal(self, width):
             width = max(3, width)
