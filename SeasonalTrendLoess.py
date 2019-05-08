@@ -594,6 +594,7 @@ class SeasonalTrendLoess:
         trend = self.fDecomposition.fTrend
         weights = self.fDecomposition.fWeights
 
+        # Optimization with numpy
         self.fDetrend = data - trend
 
         residualWeights = weights if useResidualWeights else None
@@ -627,6 +628,7 @@ class SeasonalTrendLoess:
         for i in range(len(data)):
             seasonal[i] = self.fExtendedSeasonal[self.fPeriodLength + i] - self.fDeSeasonalized[i]
 
+        # Optimization with numpy
         trend = data - seasonal
 
         residualWeights = weights if useResidualWeights else None
