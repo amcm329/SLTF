@@ -542,8 +542,13 @@ class SeasonalTrendLoess:
             smoothedSeasonal = seasonalSmoother.smooth()
 
 			# Update the seasonal with the smoothed values.
-			# We only do the smoothing part in the middle of the seasonal vector. We avoid the extremes in a different way than it's do in the java code
-            self.fSeasonal[1:-1] = smoothedSeasonal[1:-1]
+            s0 = self.fSeasonal[0]
+            sN = self.fSeasonal[-1]
+            self.fSeasonal = smoothedSeasonal
+
+            if restoreEndPoints:
+                self.fSeasonal[0] = s0
+                self.fSeasonal[-1] = sN
 
             # We avoid the loop thanks to the power of numpy
             self.fResiduals = self.fData - self.fTrend - self.fSeasonal
