@@ -65,7 +65,7 @@ class SeasonalTrendLoess:
         # 		 * Required - no default.
         # 		 *
         # 		 * @param period period length (number of data points in each season or period)
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setPeriodLength(self, period):
             """ generated source for method setPeriodLength """
@@ -80,7 +80,7 @@ class SeasonalTrendLoess:
         # 		 * Required unless setPeriodic is called.
         # 		 *
         # 		 * @param width LOESS width for the seasonal sub-series
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setSeasonalWidth(self, width):
             """ generated source for method setSeasonalWidth """
@@ -92,7 +92,7 @@ class SeasonalTrendLoess:
         # 		 * Defaults to 1.
         # 		 *
         # 		 * @param degree LOESS degree for the seasonal sub-series
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setSeasonalDegree(self, degree):
             """ generated source for method setSeasonalDegree """
@@ -104,7 +104,7 @@ class SeasonalTrendLoess:
         # 		 * Defaults to 10% of the smoother width.
         # 		 *
         # 		 * @param jump LOESS jump (number of points to skip) for the seasonal sub-series
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setSeasonalJump(self, jump):
             """ generated source for method setSeasonalJump """
@@ -113,10 +113,10 @@ class SeasonalTrendLoess:
 
         # 
         # 		 * Set the LOESS width (in data points) used to smooth the trend.
-        # 		 * Defaults to (int) (1.5 * periodLength / (1 - 1.5 / seasonalWidth) + 0.5)
+        # 		 * Defaults to (1.5 * periodLength / (1 - 1.5 / seasonalWidth) + 0.5)
         # 		 *
         # 		 * @param width LOESS with for the trend component
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setTrendWidth(self, width):
             """ generated source for method setTrendWidth """
@@ -128,7 +128,7 @@ class SeasonalTrendLoess:
         # 		 * Defaults to 1.
         # 		 *
         # 		 * @param degree LOESS degree for the trend component
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setTrendDegree(self, degree):
             """ generated source for method setTrendDegree """
@@ -140,7 +140,7 @@ class SeasonalTrendLoess:
         # 		 * Defaults to 10% of the smoother width.
         # 		 *
         # 		 * @param jump LOESS jump (number of points to skip) for the trend component
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setTrendJump(self, jump):
             """ generated source for method setTrendJump """
@@ -152,7 +152,7 @@ class SeasonalTrendLoess:
         # 		 * Defaults to the period length.
         # 		 *
         # 		 * @param width LOESS width for the low-pass step
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setLowpassWidth(self, width):
             """ generated source for method setLowpassWidth """
@@ -164,7 +164,7 @@ class SeasonalTrendLoess:
         # 		 * Defaults to 1.
         # 		 *
         # 		 * @param degree LOESS degree for the low-pass step
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setLowpassDegree(self, degree):
             """ generated source for method setLowpassDegree """
@@ -176,7 +176,7 @@ class SeasonalTrendLoess:
         # 		 * Defaults to 10% of the smoother width.
         # 		 *
         # 		 * @param jump LOESS jump (number of points to skip) for the low-pass step
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setLowpassJump(self, jump):
             """ generated source for method setLowpassJump """
@@ -188,7 +188,7 @@ class SeasonalTrendLoess:
         # 		 * Required, but also set by setRobust, setNonRobust, setRobustFlag.
         # 		 *
         # 		 * @param ni number of inner iterations
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setInnerIterations(self, ni):
             """ generated source for method setInnerIterations """
@@ -200,7 +200,7 @@ class SeasonalTrendLoess:
         # 		 * Required, but also set by setRobust, setNonRobust, setRobustFlag.
         # 		 *
         # 		 * @param no number of outer iterations
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setRobustnessIterations(self, no):
             """ generated source for method setRobustnessIterations """
@@ -210,7 +210,7 @@ class SeasonalTrendLoess:
         # 
         # 		 * Set the default robust STL iteration counts (15 robustness iterations, 1 inner iteration).
         # 		 *
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setRobust(self):
             """ generated source for method setRobust """
@@ -221,7 +221,7 @@ class SeasonalTrendLoess:
         # 
         # 		 * Set the default non-robust STL iteration counts (0 robustness iterations, 2 inner iterations).
         # 		 *
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setNonRobust(self):
             """ generated source for method setNonRobust """
@@ -233,7 +233,7 @@ class SeasonalTrendLoess:
         # 		 * Set the robustness according to a flag; e.g. setRobust if true, setNonRobust if false.
         # 		 *
         # 		 * @param robust true to be robust
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setRobustFlag(self, robust):
             """ generated source for method setRobustFlag """
@@ -242,7 +242,7 @@ class SeasonalTrendLoess:
         # 
         # 		 * Constrain the seasonal component to be exactly periodic.
         # 		 *
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setPeriodic(self):
             """ generated source for method setPeriodic """
@@ -252,7 +252,7 @@ class SeasonalTrendLoess:
         # 
         # 		 * Set the trend smoother force a flat trend. (Degree == 0, Large Loess Width)
         # 		 *
-        # 		 * @return this
+        # 		 * @return self
         # 		 
         def setFlatTrend(self):
             """ generated source for method setFlatTrend """
@@ -497,18 +497,21 @@ class SeasonalTrendLoess:
         def updateResiduals(self):
             self.fResiduals = self.fData - self.fSeasonal - self.fTrend
 
-        def computeResidualWeights(self):
 
-			# TODO: There can be problems if "robust" iterations are done but MAD ~= 0. May want to put a floor on c001.
+        # This method contains some changes in comparison with the java code
+        def computeResidualWeights(self):
 
 			# The residual-based weights are a "bisquare" weight based on the residual deviation compared to 6 times the
 			# median absolute deviation (MAD). First compute 6 * MAD. (The sort could be a selection but this is
 			# not critical as the rest of the algorithm is higher complexity.)
+
+            # We use the power of numpy to make the first calculation of the weights, avoiding a loop
             self.fWeights = np.sort(np.absolute(self.fData - self.fSeasonal - self.fTrend))
             sixMad = 6.0 * np.median(self.fWeights)
             c999 = 0.999 * sixMad
             c001 = 0.001 * sixMad
 
+            # For the second calculation of the weights, we aren't able to avoid the loop, because each weight depends on the r value
             for i in range(len(self.fData)):
                 r = abs(self.fData[i] - self.fSeasonal[i] - self.fTrend[i])
                 if r <= c001:
@@ -519,9 +522,9 @@ class SeasonalTrendLoess:
                     self.fWeights[i] = w ** 2
                 else:
                     self.fWeights[i] = 0.0
-                    
 
-        def smoothSeasonal(self, width):
+
+        def smoothSeasonal(self, width, restoreEndPoints=True):
             width = max(3, width)
             if width % 2 == 0:
                 width += 1
@@ -538,20 +541,15 @@ class SeasonalTrendLoess:
 
             smoothedSeasonal = seasonalSmoother.smooth()
 
-			# TODO: Calculate the variance reduction in smoothing the seasonal.
-
 			# Update the seasonal with the smoothed values.
-
-			# TODO: This is not very good - it causes discontinuities a the endpoints.
-			#       Better to transition to linear in the last half-smoother width.
-
-			# Restore the end-point values as the smoother will tend to over-modify these.
+			# We only do the smoothing part in the middle of the seasonal vector. We avoid the extremes in a different way than it's do in the java code
             self.fSeasonal[1:-1] = smoothedSeasonal[1:-1]
 
+            # We avoid the loop thanks to the power of numpy
             self.fResiduals = self.fData - self.fTrend - self.fSeasonal
 
     def decompose(self):
-        # TODO: Pass input data to decompose and reallocate buffers based on that size.
+
         self.fDecomposition = self.Decomposition(self.fData)
 
         outerIteration = 0
@@ -602,14 +600,7 @@ class SeasonalTrendLoess:
 	# LOESS smoother to remove the seasonality.
 	#
     def removeSeasonality(self):
-		# TODO: This creates some garbage - see if its a problem. If so we could preallocate these work arrays and
-		# change the code to reuse them.
 
-		# The moving average "erodes" data from the boundaries. We start with:
-		#
-		# extendedSeasonal.length == data.length + 2 * periodicity
-		#
-		# and the length after each pass is.................................
         pass1 = TimeSeriesUtilities.simpleMovingAverage(self.fExtendedSeasonal, self.fPeriodLength)
         pass2 = TimeSeriesUtilities.simpleMovingAverage(pass1, self.fPeriodLength)
         pass3 = TimeSeriesUtilities.simpleMovingAverage(pass2, 3)
